@@ -11,7 +11,7 @@ export const meta = {
   title: 'Deploy a Next.js Blog with GraphCMS in 5 Minutes on Vercel',
   description:
     'Deploy your Next.js and GraphCMS blog with Vercel in just 5 minutes.',
-  published: '2020-04-30T07:47:12.000Z',
+  published: '2020-07-07T07:47:12.000Z',
   authors: ['motleydev'],
   url: '/guides/deploying-next-graphcms-in-5-minutes-with-vercel',
   example:
@@ -22,7 +22,7 @@ export const meta = {
   name: 'Next.js + GraphCMS',
   type: 'site',
   demo: 'https://next-blog-graphcms.now.sh/',
-  lastEdited: '2020-07-07T06:02:04.000Z'
+  lastEdited: '2020-07-07T12:05:55.000Z'
 }
 
 This guide walks you through creating a blog using Next.js' [Static Generation](https://nextjs.org/docs/basic-features/pages) feature and [GraphCMS](https://graphcms.com/) through the [GraphCMS GraphQL API](https://graphcms.com/) and deploying the project with [Vercel](/).
@@ -33,12 +33,12 @@ This guide walks you through creating a blog using Next.js' [Static Generation](
   height={1170 / 2.5}
 />
 
-For the frontend of this project, you will be using Next.js – the production-ready React framework. For the backend you will be using [GraphCMS](https://graphcms.com/) – a flexible headless CMS built 100% on GraphQL\*\*.
+For the frontend of this project, you will be using Next.js – the production-ready React framework. For the backend you will be using [GraphCMS](https://graphcms.com/) – a flexible headless CMS built **100% on GraphQL**.
 
 Two of the biggest selling points for GraphCMS are:
 
-- **Full GraphQL Specification Support** this means you can query AND mutate content with GraphQL - enabling richer, more interactive experiences;
-- **Highly Flexible, Drag and Drop Schema Builder** our powerful schema editor lets you visually build your API in an elegant and efficient manner, letting you build any product of any complexity to life, quickly.
+- **Full GraphQL specification support**, this means you can query AND mutate content with GraphQL - enabling richer, more interactive experiences.
+- **A highly flexible, drag and drop schema builder** which lets you visually build your API in an elegant and efficient manner, bringing any product of any complexity to life, quickly.
 
 <Image
   src={`${process.env.ASSETS}/guides/deploying-next-graphcms-in-5-minutes-with-vercel/gcms-nice-editor.mp4`}
@@ -64,9 +64,9 @@ After creating an account, create a **new project from template** from the dashb
   height={740 / 2.5}
 />
 
-## Step 2: Create Your Next.js App and Create an Env file
+## Step 2: Create Your Next.js App
 
-To display your new blog and content, create a new [Next.js](https://nextjs.org/) application using [create-next-app](https://create-react-app.dev/), then run the following command and follow the wizard:
+To display your new blog and content, create a new [Next.js](https://nextjs.org/) application using [create-next-app](https://create-react-app.dev/) by running the following command and answering the guided questions:
 
 <Snippet
   dark
@@ -77,7 +77,7 @@ To display your new blog and content, create a new [Next.js](https://nextjs.org/
 Navigate inside the directory.
 
 <Snippet dark text="cd cms-graphcms-blog" />
-<Caption>Navigating inside the directory and create a copy of envs.</Caption>
+<Caption>Navigating inside the directory.</Caption>
 
 ## Step 3: Connect to Vercel
 
@@ -103,34 +103,41 @@ After that, we can add our environment variables to Vercel using the CLI. Adding
 
 Vercel supports production, preview (like branch previews from Github) and development. Next we'll add each of our environment variables and the CLI will prompt us for the values.
 
+### Provide the API value.
+
 <Snippet dark text="vercel env add GRAPHCMS_PROJECT_API production" />
 <Caption>Format of the Vercel command to add your project API.</Caption>
 
-Provide the API value.
+### Provide the **dev** auth token value.
 
 <Snippet dark text="vercel env add GRAPHCMS_DEV_AUTH_TOKEN production" />
 <Caption>Format of the Vercel command to add your project API.</Caption>
 
-Provide the **dev** auth token value.
+### Provide the **prod** auth token value.
 
 <Snippet dark text="vercel env add GRAPHCMS_PROD_AUTH_TOKEN production" />
 <Caption>Format of the Vercel command to add your project API.</Caption>
 
-Provide the **prod** auth token value.
+### Provide the preview secret token value.
 
 <Snippet dark text="vercel env add GRAPHCMS_PREVIEW_SECRET production" />
 <Caption>Format of the Vercel command to add your preview secret.</Caption>
 
-Provide the preview secret token value. For more information on working with preview URLs, follow the example provided in the [GraphCMS NextJS guide](https://github.com/vercel/next.js/tree/canary/examples/cms-graphcms).
+<Note>
+  The dev auth token and the preview auth token are only neccesary for working
+  with preview urls. For more information on working with preview URLs, follow
+  the example provided in the [GraphCMS NextJS
+  guide](https://github.com/vercel/next.js/tree/canary/examples/cms-graphcms).
+</Note>
 
-Now that are environment variables are in place, all you need to do is re-run the vercel deploy by typing:
+Now that our environment variables are in place, all you need to do is re-run the vercel deploy by typing:
 
 <Snippet dark text="vercel --production" />
 <Caption>Deploy your local project to production in vercel.</Caption>
 
-And that's it! You've succesfully created a blog in GraphCMS and deploy it online. Now head back to GraphCMS and explore the app some more to discover even more functionality you can add to your website. [Our examples page](https://graphcms.com/examples) includes many more examples of things you can build with GraphCMS and our [documentation](https://graphcms.com/docs) should help you find your way.
+And that's it! You've succesfully created a blog in GraphCMS and deployed it online. Now, head back to GraphCMS and explore the app and discover even more functionality you can add to your website. [Our examples page](https://graphcms.com/examples) includes many more examples of things you can build with GraphCMS and our [documentation](https://graphcms.com/docs) should help you find your way.
 
-To get a deeper understanding of what's happening under the hood, refer to this video by Luis Alvarez and Jesse Martin where they walk through the steps deploying GraphCMS to Vercel and discuss more of the technical functionality behind it.
+To get a deeper understanding of what's happening under the hood, refer to this video by Luis Alvarez and Jesse Martin where they walk through the steps deploying GraphCMS to Vercel and explain more of the technical functionality behind it.
 
 <iframe
   width="560"
