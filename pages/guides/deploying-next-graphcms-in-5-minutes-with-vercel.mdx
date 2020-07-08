@@ -1,7 +1,7 @@
 import Guide from '~/components/layout/guide'
 import Snippet from '~/components/snippet'
 import { InlineCode } from '~/components/text/code'
-import { Image } from '~/components/media'
+import { Image, YouTube } from '~/components/media'
 import Caption from '~/components/text/caption'
 import Note from '~/components/text/note'
 import Link from '~/components/text/link'
@@ -22,7 +22,7 @@ export const meta = {
   name: 'Next.js + GraphCMS',
   type: 'site',
   demo: 'https://next-blog-graphcms.now.sh/',
-  lastEdited: '2020-07-07T12:05:55.000Z'
+  lastEdited: '2020-07-08T12:19:42.000Z'
 }
 
 This guide walks you through creating a blog using Next.js' [Static Generation](https://nextjs.org/docs/basic-features/pages) feature and [GraphCMS](https://graphcms.com/) through the [GraphCMS GraphQL API](https://graphcms.com/) and deploying the project with [Vercel](/).
@@ -139,14 +139,7 @@ And that's it! You've succesfully created a blog in GraphCMS and deployed it onl
 
 To get a deeper understanding of what's happening under the hood, refer to this video by Luis Alvarez and Jesse Martin where they walk through the steps deploying GraphCMS to Vercel and explain more of the technical functionality behind it.
 
-<iframe
-  width="560"
-  height="315"
-  src="https://www.youtube.com/embed/UCaKt6ljno0"
-  frameborder="0"
-  allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-  allowfullscreen
-/>
+<YouTube videoid="UCaKt6ljno0" width={2048 / 2.5} height={1170 / 2.5} />
 
 <DeploySection meta={meta} />
 
