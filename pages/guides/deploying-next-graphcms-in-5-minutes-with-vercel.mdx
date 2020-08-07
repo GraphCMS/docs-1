@@ -14,6 +14,7 @@ export const meta = {
   published: '2020-07-07T07:47:12.000Z',
   authors: ['motleydev'],
   url: '/guides/deploying-next-graphcms-in-5-minutes-with-vercel',
+  env: ['GRAPHCMS_PROJECT_API', 'GRAPHCMS_DEV_AUTH_TOKEN', 'GRAPHCMS_PROD_AUTH_TOKEN', 'GRAPHCMS_PREVIEW_SECRET'],
   example:
     'https://github.com/vercel/next.js/tree/canary/examples/cms-graphcms',
   image:
@@ -96,32 +97,12 @@ Locate the following variables names from your project, located in the .env.loca
 />
 <Caption>Finding environment variables in GraphCMS.</Caption>
 
-After that, we can add our environment variables to Vercel using the CLI. Adding a variable follows the following pattern:
+After that, we can add our environment variables to Vercel using the deployment flow prompts. Adding a variable follows the following pattern:
 
 <Snippet dark text="vercel env add [ENVIRONMENT_VARIABLE_NAME] [ENVIRONMENT]" />
 <Caption>Format of the Vercel command to add secrets.</Caption>
 
 Vercel supports production, preview (like branch previews from Github) and development. Next we'll add each of our environment variables and the CLI will prompt us for the values.
-
-### Provide the API value.
-
-<Snippet dark text="vercel env add GRAPHCMS_PROJECT_API production" />
-<Caption>Format of the Vercel command to add your project API.</Caption>
-
-### Provide the **dev** auth token value.
-
-<Snippet dark text="vercel env add GRAPHCMS_DEV_AUTH_TOKEN production" />
-<Caption>Format of the Vercel command to add your project API.</Caption>
-
-### Provide the **prod** auth token value.
-
-<Snippet dark text="vercel env add GRAPHCMS_PROD_AUTH_TOKEN production" />
-<Caption>Format of the Vercel command to add your project API.</Caption>
-
-### Provide the preview secret token value.
-
-<Snippet dark text="vercel env add GRAPHCMS_PREVIEW_SECRET production" />
-<Caption>Format of the Vercel command to add your preview secret.</Caption>
 
 <Note>
   The dev auth token and the preview auth token are only neccesary for working
@@ -130,7 +111,9 @@ Vercel supports production, preview (like branch previews from Github) and devel
   guide](https://github.com/vercel/next.js/tree/canary/examples/cms-graphcms).
 </Note>
 
-Now that our environment variables are in place, all you need to do is re-run the vercel deploy by typing:
+Now we can simply deploy our app to Vercel, add the values from our settings above at the prompts, and our website will be deployed.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?s=https%3A%2F%2Fgithub.com%2Fvercel%2Fnext.js%2Ftree%2Fcanary%2Fexamples%2Fcms-graphcms&env=GRAPHCMS_PROJECT_API,GRAPHCMS_PROD_AUTH_TOKEN,GRAPHCMS_DEV_AUTH_TOKEN,GRAPHCMS_PREVIEW_SECRET)
 
 <Snippet dark text="vercel --production" />
 <Caption>Deploy your local project to production in vercel.</Caption>
