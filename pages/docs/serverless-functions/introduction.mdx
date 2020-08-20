@@ -1,0 +1,233 @@
+import Doc from '~/components/layout/docs'
+import Link from '~/components/text/link'
+import Snippet from '~/components/snippet'
+import { InlineCode } from '~/components/text/code'
+import Caption from '~/components/text/caption'
+import Card from '~/components/card'
+import Note from '~/components/text/note'
+import ProductName from '~/components/name/product-name'
+import { PRODUCT_NAME } from '~/lib/constants'
+import ProductShortName from '~/components/name/product-short-name'
+
+export const meta = {
+  title: 'Serverless Functions',
+  description: `Learn how to deploy Serverless Functions with ${PRODUCT_NAME}.`,
+  editUrl: 'pages/docs/serverless-functions/introduction.mdx',
+  lastEdited: '2020-08-04T21:21:17.000Z',
+}
+
+With <ProductName />, you can deploy Serverless Functions, which are pieces of code written with [backend languages](/docs/v2/serverless-functions/supported-languages/#supported-languages) that take an HTTP request and provide a response.
+
+You can use Serverless Functions to handle user authentication, form submission, database queries, custom
+slack commands, and more.
+
+## Creating Serverless Functions
+
+To create a Serverless Function, create a file in an `/api` directory from your project root with the appropriate language extension.
+
+<Note>
+  If you are using Next.js, use the <InlineCode>/pages/api</InlineCode>{' '}
+  directory instead.
+  <br />
+  <Link href="https://nextjs.org/docs/api-routes/introduction">
+    Read more about API functionality with Next.js
+  </Link>
+  .
+</Note>
+
+For example, to create a TypeScript function, you can create a file called `get-user.ts` like below.
+
+```ts
+import { NowRequest, NowResponse } from '@vercel/node'
+
+export default (req: NowRequest, res: NowResponse) => {
+  res.json({ name: 'John', email: 'john@example.com' })
+}
+```
+
+<Caption>
+  A TypeScript Serverless Function that returns a JSON response.
+</Caption>
+
+When a user visits `/api/get-user`, they will receive the JSON from above. Note that you don't have to explicitly set up any routing rules for this to work. By default, [filesystem routing](/docs/configuration/#routes) is leveraged.
+
+## Deploying Serverless Functions
+
+To deploy Serverless Functions without any additional configuration, you can put files with extensions matching [supported languages](/docs/v2/serverless-functions/supported-languages) and exported functions in the `/api` directory at your project's root.
+
+<Note>
+  If you are using Next.js, use the <InlineCode>/pages/api</InlineCode>{' '}
+  directory instead.
+  <br />
+  <Link href="https://nextjs.org/docs/api-routes/introduction">
+    Read more about API functionality with Next.js
+  </Link>
+  .
+</Note>
+
+Then, push to your connected Git repository using a [<ProductName /> for Git Integration](/docs/v2/git-integrations) to receive a deployment automatically.
+
+### An Example Node.js Serverless Function
+
+To deploy a [serverless Node.js API](/docs/v2/serverless-functions/supported-languages#node.js), provide a main export function like the following, in a `.js` file within the `/api` directory:
+
+```js
+module.exports = (req, res) => {
+  res.json({
+    body: req.body,
+    query: req.query,
+    cookies: req.cookies,
+  })
+}
+```
+
+<Caption>
+  An example Node.js Serverless Function using Express.js-like helper methods
+  from the{' '}
+  <Link href="/docs/v2/serverless-functions/supported-languages#node.js-request-and-response-objects">
+    Request and Response objects
+  </Link>
+  .
+</Caption>
+
+The above example echoes the `body`, path `query`, and `cookies`, passed with the request object, as a JSON object using helper methods provided through the [Request and Response](/docs/v2/serverless-functions/supported-languages/#node.js-request-and-response-objects).
+
+Then, all you need to do, to have a live API, is push to your connected Git repository using a [<ProductName /> for Git Integration](/docs/v2/git-integrations) to receive a deployment automatically.
+
+The resulting deployment will contain your Node.js Serverless Function and will provide you with a URL like the following, with your API ready to go: <https://node-echo-api.now-examples.now.sh/api/?name=example>
+
+### More Examples and Supported Languages
+
+For all supported languages, see the [Supported Languages for Serverless Functions documentation](/docs/v2/serverless-functions/supported-languages).
+
+More examples of applications you can deploy paired with Serverless Functions can be found in the [<ProductName /> repository on GitHub](https://github.com/vercel/vercel/tree/master/examples).
+
+You can get started with many of the <ProductName /> examples by deploying them from the [Quickstarts section](/docs/v2/introduction#quickstarts).
+
+## Environment Variables
+
+You can configure Environment Variables for your Serverless Functions directly from Project Settings.
+Check out [the Environment Variables section of our Build Step documentation](/docs/v2/build-step#environment-variables) to learn more.
+
+## Path Segments
+
+Deploying Serverless Functions with <ProductName /> gives you the ability to use path segments through file names instead of a complex routes file.
+
+Creating a file using any of the [supported languages](/docs/v2/serverless-functions/supported-languages) in the `/api` directory and wrapping the filename in square brackets, such as `[name].js` will provide you with a file that takes a path segment and gives it to the function when requested with a value.
+
+<Note>
+  When using path segments, the value passed is made available to the{' '}
+  <InlineCode>req.query</InlineCode> object under the key used for the file
+  name.
+</Note>
+
+When using path segments, **any dynamic filename can be used**, this is indicated by the use of square brackets. The filename for the path segment is used solely for the purpose of providing a key name for accessing the value on the `req.query` object.
+
+For example, creating a `name` directory (within `/api`) that contains a `[name].js` file will allow you to receive the path segment entered when accessing `/api/name/your-name` on the `req.query.name` object.
+
+The following Node.js example code could then use the path segment in its functionality when requested:
+
+```js
+module.exports = (req, res) => {
+  const {
+    query: { name },
+  } = req
+
+  res.send(`Hello ${name}!`)
+}
+```
+
+<Caption>
+  An example of a Node.js Serverless Function that takes a name path segment and
+  returns a string using it.
+</Caption>
+
+The resulting deployment can be found here: <https://path-segment-with-node.now-examples.now.sh/api/name/world>
+
+<Note>
+  Any{' '}
+  <Link href="/docs/v2/serverless-functions/supported-languages">
+    supported language
+  </Link>{' '}
+  can utilize path segments.
+</Note>
+
+## Local Development
+
+​<ProductName /> provides an additional command with [<ProductShortName /> CLI](/download) to help you develop Serverless Functions locally by replicating the production environment on <ProductName /> with your localhost.
+
+If you have an `api` directory like the [above examples](#deploying-serverless-functions) on this page, you can run the following command to start a local development environment that supports your serverless API and allows you to develop locally, just make sure to install your project's dependencies first with `npm install`:
+
+<Snippet width="100%" dark text="vercel dev" />
+<Caption>
+  Starting a local development environment using <ProductShortName /> CLI, for
+  Serverless Functions.
+</Caption>
+
+<Note>
+  The <InlineCode>vercel dev</InlineCode> command is still in beta. If you have
+  any feedback, <Link href="/feedback">please let us know</Link>.
+</Note>
+
+If you have a statically generated frontend that supports its own development environment, such as Next.js, we recommend creating a `dev` script within a `package.json` file at the root of your project that `vercel dev` can use and extend:
+
+```json
+{
+  ...
+  "scripts": {
+    "dev": "next --port $PORT"
+  }
+}
+```
+
+<Caption>
+  Defining a custom <InlineCode>dev</InlineCode> script for Next.js in a{' '}
+  <InlineCode>package.json</InlineCode> file.
+</Caption>
+
+<Note>
+  The above script example uses <InlineCode>--port $PORT</InlineCode> in the{' '}
+  <InlineCode>dev</InlineCode> command. This uses the framework's – in this case
+  Next.js – port argument to pass the port from{' '}
+  <InlineCode>vercel dev</InlineCode> so that it can properly fetch the running
+  framework.
+</Note>
+
+### Using Environment Variables Locally
+
+During local development with `vercel dev`, you may wish to provide your application with environment variables. You can find instructions on how to do this in the [Environment Variables section of the Build Step documentation](/docs/v2/build-step#environment-variables).
+
+## Advanced Usage
+
+For an advanced configuration and structure, you can create a `vercel.json` file to use [Runtimes](/docs/runtimes) and other customizations.
+
+We do, however, recommend using the `api` directory to keep things simple for your project.
+
+## Technical Details
+
+### CPU Calculation
+
+Serverless Functions are allocated CPU power according to the amount of memory configured for them.
+
+For example, with 1,792MB memory configured, a Serverless Function will have the equivalent of one vCPU.
+
+## Related
+
+For more information on what to do next, we recommend the following articles:
+
+<Card title="Git Integration" href="/docs/v2/git-integrations">
+  Learn more about how <ProductName /> integrates with Git to make your workflow
+  easier.
+</Card>
+
+<Card title="Using Custom Domains" href="/docs/v2/custom-domains">
+  Once deployed, your projects can be assigned to a custom domain or specified
+  name of your choice to give it a primary place to see the latest version of
+  your application.
+</Card>
+
+export default ({ children }) => <Doc meta={meta}>{children}</Doc>
+
+export const config = {
+  amp: 'hybrid',
+}

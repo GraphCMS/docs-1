@@ -11,7 +11,7 @@ import OrgName from '~/components/name/org-name'
 export const meta = {
   editUrl:
     'pages/docs/runtimes/runtimes-mdx/official-runtimes/official-runtimes.mdx',
-  lastEdited: '2019-10-22T21:47:59.000Z'
+  lastEdited: '2019-10-22T21:47:59.000Z',
 }
 
 # Official Runtimes
@@ -21,11 +21,11 @@ Runtimes are modules that transform your source code into [Serverless Functions]
 <Note type="warning">
   In most cases, advanced Runtimes usage with configuration is not necessary.
   See{' '}
-  <Link href="/docs/v2/introduction">
+  <Link href="/docs/introduction">
     the <ProductName /> Introduction documentation
   </Link>{' '}
   or the{' '}
-  <Link href="/docs/v2/serverless-functions/introduction">
+  <Link href="/docs/serverless-functions/introduction">
     Serverless Functions documentation
   </Link>{' '}
   for more information.
@@ -122,7 +122,7 @@ An example TypeScript file that exports a default Node.js function and takes in 
 ```js
 import { NowRequest, NowResponse } from '@vercel/node'
 
-export default function(req: NowRequest, res: NowResponse) {
+export default function (req: NowRequest, res: NowResponse) {
   const { name = 'World' } = req.query
   res.send(`Hello ${name}!`)
 }
@@ -135,8 +135,11 @@ export default function(req: NowRequest, res: NowResponse) {
 
 The `NowRequest` and `NowResponse` imports in the above example are types that we provide for [the Request and Response objects](#official-runtimes/node-js/node-js-request-and-response-objects), including the helper methods with <ProductName />. These types can be installed from npm with the following command:
 
-<Snippet dark text="npm install @vercel/node --save-dev" />
-<Caption>Installing <InlineCode>@vercel/node</InlineCode> for types when using Node.js on <ProductName />.</Caption>
+<Snippet width="100%" dark text="npm install @vercel/node --save-dev" />
+<Caption>
+  Installing <InlineCode>@vercel/node</InlineCode> for types when using Node.js
+  on <ProductName />.
+</Caption>
 
 You can also use a `tsconfig.json` file at the root of your project to configure the TypeScript compiler. Most options are supported aside from ["Path Mappings"](https://www.typescriptlang.org/docs/handbook/module-resolution.html#path-mapping) and ["Project References"](https://www.typescriptlang.org/docs/handbook/project-references.html).
 

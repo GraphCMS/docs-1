@@ -9,7 +9,7 @@ import ProductShortName from '~/components/name/product-short-name'
 export const meta = {
   editUrl:
     'pages/docs/configuration/configuration-mdx/configuration/configuration.mdx',
-  lastEdited: '2019-11-05T19:44:00.000Z'
+  lastEdited: '2019-11-05T19:44:00.000Z',
 }
 
 # Project
@@ -63,7 +63,7 @@ Specifies the [<ProductName /> Platform version](/docs/v2/platform/overview#vers
 
 **Limit**: A maximum of 64 aliases in the array.
 
-The alias or aliases are applied automatically using [<ProductName /> for GitHub](/docs/v2/git-integrations/vercel-for-github), [<ProductName /> for GitLab](/docs/v2/git-integrations/vercel-for-gitlab), or [<ProductName /> for Bitbucket](/docs/v2/git-integrations/vercel-for-bitbucket) when merging or pushing to the default branch.
+The alias or aliases are applied automatically using [<ProductName /> for GitHub](/docs/v2/git-integrations/vercel-for-github), [<ProductName /> for GitLab](/docs/v2/git-integrations/vercel-for-gitlab), or [<ProductName /> for Bitbucket](/docs/v2/git-integrations/vercel-for-bitbucket) when merging or pushing to the [Production Branch](/docs/v2/git-integrations#production-branch).
 
 You can deploy to the defined aliases using [<ProductShortName /> CLI](/download) by setting the [production deployment environment target](/docs/v2/custom-domains#deploying-with-your-domain).
 
@@ -134,9 +134,8 @@ Environment variables passed to the invoked [Serverless Functions](/docs/v2/serv
 [Environment variables](/docs/v2/build-step#environment-variables) passed to the [Build](/docs/v2/build-step) processes.
 
 <P>
-  The following example will pass the <InlineCode>MY_KEY</InlineCode> static
-  env to all{' '}
-  <Link href="/docs/v2/build-step">Builds</Link> and
+  The following example will pass the <InlineCode>MY_KEY</InlineCode> static env
+  to all <Link href="/docs/v2/build-step">Builds</Link> and
   <InlineCode>SECRET</InlineCode> resolved from the <InlineCode>
     my-secret-name
   </InlineCode> <Link href="/docs/v2/build-step#environment-variables">
@@ -154,17 +153,14 @@ Environment variables passed to the invoked [Serverless Functions](/docs/v2/serv
 
 ## builds
 
-<Note>
-  There's no need to use this property for deploying your frontend. If you'd
-  like to customize your Serverless Functions, use the{' '}
-  <Link href="/docs/configuration#project/functions">functions</Link> property
-  instead.
+<Note type="alert">
+  We recommend against using this property.
   <br />
   <br />
-  The only case in which the use of <InlineCode>builds</InlineCode> is still recommended
-  is if your Git repository contains multiple different frontends that you would
-  like to mount to different paths in your URL. True monorepos (mounting multiple
-  frontends to different domains) are currently not supported.
+  If you'd like to customize your Serverless Functions, use the <Link href="/docs/configuration#project/functions">
+    functions
+  </Link> property instead. If you'd like to deploy a monorepo, learn more about
+  how to do it <Link href="/docs/v2/git-integrations#monorepos">here</Link>.
 </Note>
 
 **Type:** `Array` of build `Object`.
@@ -217,6 +213,10 @@ A [glob](https://github.com/isaacs/node-glob#glob-primer) pattern that matches t
 - `maxDuration` (optional): An integer defining how long your Serverless Function should be allowed to run on every request in seconds (between `1` and the maximum limit of your plan, as mentioned below).
 - `includeFiles` (optional): A [glob](https://github.com/isaacs/node-glob#glob-primer) pattern to match files that should be included in your Serverless Function. If you’re using a Community Runtime, the behavior might vary. Please consult its documentation for more details.
 - `excludeFiles` (optional): A [glob](https://github.com/isaacs/node-glob#glob-primer) pattern to match files that should be excluded from your Serverless Function. If you’re using a Community Runtime, the behavior might vary. Please consult its documentation for more details.
+
+<Note type="warning">
+  When using Next.js, only <InlineCode>memory</InlineCode> and <InlineCode>maxDuration</InlineCode> can be used.
+</Note>
 
 **Description:**
 
@@ -319,6 +319,17 @@ For more information on routes, see the documentation:
 </Card>
 
 ## regions
+
+<Note type="warning">
+  Deploying Serverless Functions to multiple regions is limited to{' '}
+  <Link href="/pricing">Enterprise plans</Link> and deploying to a specified
+  region is limited to <Link href="/pricing">Pro plans</Link>. Read more about
+  these limits on{' '}
+  <Link href="/docs/v2/platform/limits#serverless-function-regions">
+    the Limits page
+  </Link>
+  .
+</Note>
 
 **Type:** `Array` of region identifier `String`.
 
@@ -428,8 +439,8 @@ This is not recommended because it could lead to search engines indexing two dif
   This example configures custom redirects that map to static files,{' '}
   <Link href="/docs/v2/serverless-functions/introduction">
     Serverless Functions
-  </Link>,{' '}
-  and external URLs.
+  </Link>
+  , and external URLs.
 </P>
 <Code lang="json">{`{
   "redirects": [
@@ -461,15 +472,15 @@ In some rare cases, you might need to assign a custom status code for older HTTP
   This example configures custom rewrites that map to static files,{' '}
   <Link href="/docs/v2/serverless-functions/introduction">
     Serverless Functions
-  </Link>,{' '}
-  automatic query string matching, and a wildcard proxy.
+  </Link>
+  , automatic query string matching, and a wildcard proxy.
 </P>
 <Code lang="json">{`{
   "rewrites": [
     { "source": "/about", "destination": "/about-our-company.html" },
     { "source": "/resize/:width/:height", "destination": "/api/sharp" },
     { "source": "/user/:id", "destination": "/api/user" },
-    { "source": "/proxy/(.*)", "destination": "https://example.com/$1" }
+    { "source": "/proxy/:match*", "destination": "https://example.com/:match*" }
   ]
 }`}</Code>
 
@@ -493,8 +504,8 @@ In some rare cases, you might need to assign a custom status code for older HTTP
   This example configures custom response headers for static files,{' '}
   <Link href="/docs/v2/serverless-functions/introduction">
     Serverless Functions
-  </Link>,
-  and a wildcard that matches all routes.
+  </Link>
+  , and a wildcard that matches all routes.
 </P>
 <Code lang="json">{`{
   "headers": [

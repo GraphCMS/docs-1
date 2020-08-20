@@ -1,0 +1,560 @@
+import { Code, InlineCode } from '~/components/text/code'
+import Link, { HelpLink } from '~/components/text/link'
+import Endpoint from '~/components/api/endpoint'
+import Request from '~/components/api/request'
+import ProductName from '~/components/name/product-name'
+import OrgName from '~/components/name/org-name'
+import CdnName from '~/components/name/cdn-name'
+import { API_ENDPOINT } from '~/lib/constants'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/endpoints/domains.mdx',
+  lastEdited: '2019-10-17T14:44:04.000Z',
+}
+
+## Domains
+
+### List all the domains
+
+<Endpoint method="GET" url="/v5/domains" />
+
+Retrieves a list of domains registered for the authenticating user. By default it returns
+the last 20 domains if no `limit` is provided.
+
+#### Request Query Parameters
+
+The response of this API can be controlled with the following optional query parameters.
+
+| Key       | Description                                           |
+| --------- | ----------------------------------------------------- |
+| **limit** | Maximum number of domains to list from a request.     |
+| **since** | Get domains created after this JavaScript timestamp.  |
+| **until** | Get domains created before this JavaScript timestamp. |
+
+#### Response Parameters
+
+| Key                     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**                  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the domain.                                                                                                            |
+| **name**                | <HelpLink href="#api-basics/types">String</HelpLink>       | The domain name.                                                                                                                        |
+| **serviceType**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The type of service the domain is handled by. `external` if the DNS is externally handled, or `zeit.world` if handled with <OrgName />. |
+| **nsVerifiedAt**        | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's nameservers were verified based on the intended set.                                                     |
+| **txtVerifiedAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's TXT DNS record was verified.                                                                             |
+| **cdnEnabled**          | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | Whether the domain has the [<CdnName />](/docs/v2/domains-and-aliases/cdn) enabled or not.                                              |
+| **createdAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain was created in the registry.                                                                                   |
+| **expiresAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain is set to expire. `null` if not bought with <OrgName />.                                                   |
+| **boughtAt**            | <HelpLink href="#api-basics/types">Date</HelpLink>         | If it was purchased through <ProductName />, the date when it was purchased.                                                            |
+| **verifiedRecord**      | <HelpLink href="#api-basics/types">ID</HelpLink>           | The ID of the verification record in the registry.                                                                                      |
+| **verified**            | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain has the ownership verified.                                                                                               |
+| **nameservers**         | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the current nameservers of the domain.                                                                                        |
+| **intendedNameservers** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the intended nameservers for the domain to point to <OrgName /> DNS.                                                          |
+| **creator**             | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information of the domain creator, including the user's `id`, `username`, and `email`.                             |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v5/domains`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "domains": [
+    {
+      "id": "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1",
+      "name": "example.com",
+      "serviceType": "external",
+      "nsVerifiedAt": null,
+      "txtVerifiedAt": null,
+      "cdnEnabled": false,
+      "createdAt": 1544658552174,
+      "boughtAt": null,
+      "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43",
+      "verified": true,
+      "nameservers": [
+        "ns1.nameserver.net",
+        "ns2.nameserver.net"
+      ],
+      "intendedNameservers": [
+        "a.zeit-world.net",
+        "b.zeit-world.co.uk",
+        "e.zeit-world.org",
+        "f.zeit-world.com"
+      ],
+      "creator": {
+        "id": "ZspSRT4ljIEEmMHgoDwKWDei",
+        "username": "zeit_user",
+        "email": "demo@example.com"
+      }
+    }
+  ],
+  "pagination": {
+    "count": 1,
+    "next": 1544658552174,
+    "prev": 1544658552174
+  }
+}`}</Code>
+
+### Add a New Domain
+
+<Endpoint method="POST" url="/v4/domains" />
+
+Register a new domain name with <ProductName /> for the authenticating
+user. The field `serviceType` selects whether the domains are going to use
+zeit.world DNS or an external nameserver. In the latter case a `CNAME/ALIAS`
+record(s) are expected to point towards `cname.vercel-dns.com`.
+
+If an external nameserver is used the user must verify the domain name
+by creating a TXT record for `_now` subdomain containing a
+verification token provided as a POST result. After the record has
+been created, the user may retry the same POST and the endpoint shall return
+`verified: true`, if the domain was verified successfully.
+
+#### Request Parameters
+
+| Key      | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Required | Description                      |
+| -------- | ---------------------------------------------------------- | -------- | -------------------------------- |
+| **name** | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The domain name you want to add. |
+
+#### Response Parameters
+
+| Key                     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                                         |
+| ----------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**                  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the domain.                                                                                                                        |
+| **name**                | <HelpLink href="#api-basics/types">String</HelpLink>       | The domain name.                                                                                                                                    |
+| **serviceType**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The type of service the domain is handled by. `external` if the DNS is externally handled, or `zeit.world` if handled with <OrgName />.             |
+| **nsVerifiedAt**        | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's nameservers were verified based on the intended set.                                                                 |
+| **txtVerifiedAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's TXT DNS record was verified.                                                                                         |
+| **cdnEnabled**          | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | Whether the domain has the [<CdnName />](/docs/v2/domains-and-aliases/cdn) enabled or not.                                                          |
+| **createdAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain was created in the registry.                                                                                               |
+| **expiresAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain is set to expire. `null` if not bought with <OrgName />.                                                               |
+| **boughtAt**            | <HelpLink href="#api-basics/types">Date</HelpLink>         | If it was purchased through <ProductName />, the date when it was purchased.                                                                        |
+| **transferStartedAt**   | <HelpLink href="#api-basics/types">Date</HelpLink>         | If transferred into <OrgName />, The date when the domain transfer was initiated                                                                    |
+| **transferredAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain was successfully transferred into <OrgName />. `null` if the transfer is still processing or was never transferred in. |
+| **verifiedRecord**      | <HelpLink href="#api-basics/types">ID</HelpLink>           | The ID of the verification record in the registry.                                                                                                  |
+| **verified**            | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain has the ownership verified.                                                                                                           |
+| **nameservers**         | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the current nameservers of the domain.                                                                                                    |
+| **intendedNameservers** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the intended nameservers for the domain to point to <OrgName /> DNS.                                                                      |
+| **creator**             | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information of the domain creator, including the user's `id`, `username`, and `email`.                                         |
+
+##### Example Request
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v4/domains`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    name: 'example.com',
+  }}
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "domain": {
+    "id": "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1",
+    "name": "example.com",
+    "serviceType": "external",
+    "nsVerifiedAt": null,
+    "txtVerifiedAt": null,
+    "cdnEnabled": false,
+    "createdAt": 1544658552174,
+    "boughtAt": null,
+    "transferredAt": null,
+    "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43",
+    "verified": true,
+    "nameservers": [
+      "ns1.nameserver.net",
+      "ns2.nameserver.net"
+    ],
+    "intendedNameservers": [
+      "a.zeit-world.net",
+      "b.zeit-world.co.uk",
+      "e.zeit-world.org",
+      "f.zeit-world.com"
+    ],
+    "creator": {
+      "id": "ZspSRT4ljIEEmMHgoDwKWDei",
+      "username": "zeit_user",
+      "email": "demo@example.com"
+    }
+  }
+}`}</Code>
+
+### Transfer In a Domain
+
+<Endpoint method="POST" url="/v4/domains" />
+
+Initiate a domain transfer request from an external Registrar to <OrgName />.
+
+#### Request Parameters
+
+| Key               | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Required | Description                                                                   |
+| ----------------- | ---------------------------------------------------------- | -------- | ----------------------------------------------------------------------------- |
+| **method**        | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The domain add operation to perform. When transferring in, use `transfer-in`. |
+| **name**          | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The domain name you want to add.                                              |
+| **authCode**      | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The authorization code assigned to the domain.                                |
+| **expectedPrice** | <HelpLink href="#api-basics/types">Integer</HelpLink>      | Yes      | The price you expect to be charged for the required 1 year renewal.           |
+
+#### Response Parameters
+
+| Key                     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**                  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the domain.                                                                                                            |
+| **name**                | <HelpLink href="#api-basics/types">String</HelpLink>       | The domain name.                                                                                                                        |
+| **serviceType**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The type of service the domain is handled by. `external` if the DNS is externally handled, or `zeit.world` if handled with <OrgName />. |
+| **nsVerifiedAt**        | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's nameservers were verified based on the intended set.                                                     |
+| **txtVerifiedAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's TXT DNS record was verified.                                                                             |
+| **cdnEnabled**          | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | Whether the domain has the [<CdnName />](/docs/v2/domains-and-aliases/cdn) enabled or not.                                              |
+| **createdAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain was created in the registry.                                                                                   |
+| **expiresAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain is set to expire. `null` if not bought with <OrgName />.                                                   |
+| **boughtAt**            | <HelpLink href="#api-basics/types">Date</HelpLink>         | If it was purchased through <ProductName />, the date when it was purchased.                                                            |
+| **transferStartedAt**   | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain transfer was initiated                                                                                         |
+| **transferredAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain was successfully transferred into <OrgName />. `null` if the transfer is still processing.                 |
+| **verifiedRecord**      | <HelpLink href="#api-basics/types">ID</HelpLink>           | The ID of the verification record in the registry.                                                                                      |
+| **verified**            | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain has the ownership verified.                                                                                               |
+| **nameservers**         | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the current nameservers of the domain.                                                                                        |
+| **intendedNameservers** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the intended nameservers for the domain to point to <OrgName /> DNS.                                                          |
+| **creator**             | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information of the domain creator, including the user's `id`, `username`, and `email`.                             |
+
+##### Example Request
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v4/domains`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    method: 'transfer-in',
+    name: 'example.com',
+    authCode: 'fdhfr820ad#@FAdlj$$',
+    expectedPrice: 8,
+  }}
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "domain": {
+    "id": "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1",
+    "name": "example.com",
+    "serviceType": "external",
+    "nsVerifiedAt": null,
+    "txtVerifiedAt": null,
+    "cdnEnabled": false,
+    "createdAt": 1544658552174,
+    "boughtAt": null,
+    "transferStartedAt": 1549928108897,
+    "transferredAt": null,
+    "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43",
+    "verified": true,
+    "nameservers": [
+      "ns1.nameserver.net",
+      "ns2.nameserver.net"
+    ],
+    "intendedNameservers": [
+      "a.zeit-world.net",
+      "b.zeit-world.co.uk",
+      "e.zeit-world.org",
+      "f.zeit-world.com"
+    ],
+    "creator": {
+      "id": "ZspSRT4ljIEEmMHgoDwKWDei",
+      "username": "zeit_user",
+      "email": "demo@example.com"
+    }
+  }
+}`}</Code>
+
+### Verify a Domain
+
+<Endpoint method="POST" url="/v4/domains/:name/verify" />
+
+Verify a domain after adding either the intended nameservers or DNS TXT verification record to the domain.
+
+#### Response Parameters
+
+| Key                     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**                  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the domain.                                                                                                            |
+| **name**                | <HelpLink href="#api-basics/types">String</HelpLink>       | The domain name.                                                                                                                        |
+| **serviceType**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The type of service the domain is handled by. `external` if the DNS is externally handled, or `zeit.world` if handled with <OrgName />. |
+| **nsVerifiedAt**        | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's nameservers were verified based on the intended set.                                                     |
+| **txtVerifiedAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's TXT DNS record was verified.                                                                             |
+| **cdnEnabled**          | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | Whether the domain has the [<CdnName />](/docs/v2/domains-and-aliases/cdn) enabled or not.                                              |
+| **createdAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain was created in the registry.                                                                                   |
+| **expiresAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain is set to expire. `null` if not bought with <OrgName />.                                                   |
+| **boughtAt**            | <HelpLink href="#api-basics/types">Date</HelpLink>         | If it was purchased through <ProductName />, the date when it was purchased.                                                            |
+| **verifiedRecord**      | <HelpLink href="#api-basics/types">ID</HelpLink>           | The ID of the verification record in the registry.                                                                                      |
+| **verified**            | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain has the ownership verified.                                                                                               |
+| **nameservers**         | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the current nameservers of the domain.                                                                                        |
+| **intendedNameservers** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the intended nameservers for the domain to point to <OrgName /> DNS.                                                          |
+| **creator**             | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information of the domain creator, including the user's `id`, `username`, and `email`.                             |
+| **suffix**              | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain is used as a Custom Deployment Suffix ([available on the Enterprise plan](/pricing)).                                     |
+| **aliases**             | <HelpLink href="#api-basics/types">List</HelpLink>         | The list of aliases created using the domain.                                                                                           |
+| **certs**               | <HelpLink href="#api-basics/types">List</HelpLink>         | The list of SSL certificates created for the domain.                                                                                    |
+
+##### Example Request
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v4/domains/example.com/verify`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{}}
+/>
+
+##### Example Response (successful)
+
+<Code lang="json">{`{
+  "domain": {
+    "id": "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1",
+    "name": "example.com",
+    "serviceType": "external",
+    "nsVerifiedAt": null,
+    "txtVerifiedAt": 1546869733102,
+    "cdnEnabled": false,
+    "createdAt": 1544658552174,
+    "expiresAt": null,
+    "boughtAt": null,
+    "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43",
+    "verified": true
+    "nameservers": [
+      "ns1.nameserver.net",
+      "ns2.nameserver.net"
+    ],
+    "intendedNameservers": [
+      "a.zeit-world.co.uk",
+      "c.zeit-world.org",
+      "d.zeit-world.com",
+      "f.zeit-world.net"
+    ],
+    "creator": {
+      "id": "ZspSRT4ljIEEmMHgoDwKWDei",
+      "username": "zeit_user",
+      "email": "demo@example.com"
+    }
+  }
+}`}</Code>
+
+##### Example Response (unsuccessful)
+
+<Code lang="json">{`{
+  "error": {
+    "code": "verification_failed",
+    "message": "The domain example.com couldn't be verified. Both nameservers and TXT verification methods failed",
+    "name": "example.com",
+    "nsVerification": {
+      "name": "example.com",
+      "nameservers": [
+        "ns1.nameserver.net",
+        "ns2.nameserver.net"
+      ],
+      "intendedNameservers": [
+        "a.zeit-world.co.uk",
+        "c.zeit-world.org",
+        "d.zeit-world.com",
+        "f.zeit-world.net"
+      ]
+    },
+    "txtVerification": {
+      "name": "example.com",
+      "values": [],
+      "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43"
+    }
+  }
+}`}</Code>
+
+### Get Information for a Single Domain
+
+<Endpoint url="/v4/domains/:name" />
+
+Get information for a single domain in an account or team.
+
+#### Response Parameters
+
+| Key                     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                             |
+| ----------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **id**                  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the domain.                                                                                                            |
+| **name**                | <HelpLink href="#api-basics/types">String</HelpLink>       | The domain name.                                                                                                                        |
+| **serviceType**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The type of service the domain is handled by. `external` if the DNS is externally handled, or `zeit.world` if handled with <OrgName />. |
+| **nsVerifiedAt**        | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's nameservers were verified based on the intended set.                                                     |
+| **txtVerifiedAt**       | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain's TXT DNS record was verified.                                                                             |
+| **cdnEnabled**          | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | Whether the domain has the [<CdnName />](/docs/v2/domains-and-aliases/cdn) enabled or not.                                              |
+| **createdAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the domain was created in the registry.                                                                                   |
+| **expiresAt**           | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date at which the domain is set to expire. `null` if not bought with <OrgName />.                                                   |
+| **boughtAt**            | <HelpLink href="#api-basics/types">Date</HelpLink>         | If it was purchased through <ProductName />, the date when it was purchased.                                                            |
+| **verifiedRecord**      | <HelpLink href="#api-basics/types">ID</HelpLink>           | The ID of the verification record in the registry.                                                                                      |
+| **verified**            | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain has the ownership verified.                                                                                               |
+| **nameservers**         | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the current nameservers of the domain.                                                                                        |
+| **intendedNameservers** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the intended nameservers for the domain to point to <OrgName /> DNS.                                                          |
+| **creator**             | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information of the domain creator, including the user's `id`, `username`, and `email`.                             |
+| **suffix**              | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain is used as a Custom Deployment Suffix ([available on the Enterprise plan](/pricing)).                                     |
+| **aliases**             | <HelpLink href="#api-basics/types">List</HelpLink>         | The list of aliases created using the domain.                                                                                           |
+| **certs**               | <HelpLink href="#api-basics/types">List</HelpLink>         | The list of SSL certificates created for the domain.                                                                                    |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v4/domains/example.com`} auth />
+
+##### Example Response (successful)
+
+<Code lang="json">{`{
+  "domain": {
+    "id": "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1",
+    "name": "example.com",
+    "serviceType": "external",
+    "nsVerifiedAt": null,
+    "txtVerifiedAt": null,
+    "cdnEnabled": false,
+    "createdAt": 1544658552174,
+    "expiresAt": null,
+    "boughtAt": null,
+    "verificationRecord": "YMc9dEJKbAncYtTqSH8dp1j5NXycfEzyjkzBJ3m3UGwR43",
+    "verified": false,
+    "nameservers": [
+      "ns1.nameserver.net",
+      "ns2.nameserver.net"
+    ],
+    "intendedNameservers": [
+      "a.zeit-world.co.uk",
+      "c.zeit-world.org",
+      "d.zeit-world.com",
+      "f.zeit-world.net"
+    ],
+    "creator": {
+      "id": "ZspSRT4ljIEEmMHgoDwKWDei",
+      "username": "zeit_user",
+      "email": "demo@example.com"
+    },
+    "suffix": false,
+    "aliases": [],
+    "certs": []
+  }
+}`}</Code>
+
+##### Example Response (unsuccessful)
+
+<Code lang="json">{`{
+  "error": {
+    "code": "not_found",
+    "message": "Domain name \`my-zeit-domain.online\` not found",
+    "name": "my-zeit-domain.online"
+  }
+}
+`}</Code>
+
+### Remove a domain by name
+
+<Endpoint method="DELETE" url="/v4/domains/:name" />
+
+Delete a previously registered domain name from <ProductName />.
+Deleting a domain will automatically remove any associated aliases.
+
+#### Response Parameters
+
+| Key     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                          |
+| ------- | ---------------------------------------------------------- | ------------------------------------ |
+| **uid** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique ID of the removed domain. |
+
+##### Example Request
+
+<Request method="DELETE" url={`${API_ENDPOINT}/v4/domains/example.com`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  uid: "EmTbe5CEJyTk2yVAHBUWy4A3sRusca3GCwRjTC1bpeVnt1"
+}`}</Code>
+
+### Check a domain availability
+
+<Endpoint method="GET" url="/v4/domains/status?name" />
+
+Check if a domain name _may_ be available to buy or not. The response is a JSON with the key `available` as a boolean.
+
+#### Response Parameters
+
+| Key           | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                        |
+| ------------- | ---------------------------------------------------------- | ---------------------------------- |
+| **available** | <HelpLink href="#api-basics/types">Boolean</HelpLink>      | If the domain is available or not. |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v4/domains/status?name=example.com`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "available": false
+}`}</Code>
+
+### Check the price of a domain
+
+<Endpoint method="GET" url="/v4/domains/price?name" />
+
+Check the price to purchase a domain and how long a single purchase period is. The response is a JSON with the key `price` as a number (always an integer) and a key `period` as a number indicating the number of years the domains could be held before paying again.
+
+#### Response Parameters
+
+| Key        | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                       |
+| ---------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| **price**  | <HelpLink href="#api-basics/types">Integer</HelpLink>      | The domain price.                                 |
+| **period** | <HelpLink href="#api-basics/types">Integer</HelpLink>      | The time period by which the domain is purchased. |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v4/domains/price?name=example.com`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "price": 17,
+  "period": 1
+}`}</Code>
+
+### Purchase a domain
+
+<Endpoint method="POST" url="/v4/domains/buy" />
+
+Purchase the specified domain, it receive the domain name as the key `name` inside the request body.
+
+In case of a successful purchase the returns with code 200 and an empty body.
+
+#### Request Parameters
+
+| Key               | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Required | Description                                          |
+| ----------------- | ---------------------------------------------------------- | -------- | ---------------------------------------------------- |
+| **name**          | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The domain name to purchase.                         |
+| **expectedPrice** | <HelpLink href="#api-basics/types">Integer</HelpLink>      | Yes      | The price you expect to be charged for the purchase. |
+
+##### Example Response (successful)
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v4/domains/buy`}
+  headers={{
+    Authorization: `Bearer ${
+      props.testingtoken ? props.testingtoken.token : '<TOKEN>'
+    }`,
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    name: 'example.com',
+  }}
+/>
+
+##### Example Response (unsuccessful)
+
+<Code lang="json">{`{
+  "error": {
+    "code": "not_available",
+    "message": "Domain is not available"
+  }
+}`}</Code>

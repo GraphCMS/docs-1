@@ -8,7 +8,7 @@ assignees: ''
 
 ## Documentation
 
-**Section** if applicable to existing section(s): <!--- e.g. https://vercel.com/docs/v2/deployments/basics/ -->
+**Section** if applicable to existing section(s): <!--- e.g. https://vercel.com/docs/deployments/basics/ -->
 **Brief Summary**: <!--- A brief summary of the API reference report or request -->
 
 ## Additional Information

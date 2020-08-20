@@ -1,5 +1,13 @@
 [
   {
+    "title": "Why Doesn't A Git Push Trigger A New Deployment?",
+    "description": "Understand the conditions that trigger a new deployment from Git.",
+    "editUrl": "pages/knowledge/git-push-not-triggering-deploy.mdx",
+    "url": "/knowledge/git-push-not-triggering-deploy",
+    "published": "2020-07-08T13:46:54.155Z",
+    "lastEdited": "2020-07-08T13:46:54.155Z"
+  },
+  {
     "title": "How can I use the Vercel CLI for custom workflows?",
     "description": "Information about using the Vercel CLI in a custom workflow.",
     "editUrl": "pages/knowledge/using-vercel-cli-for-custom-workflows.mdx",
@@ -209,7 +217,7 @@
   },
   {
     "title": "How do I send and receive emails with my Vercel purchased domain?",
-    "description": "Information on how to send and receive email with a domain purchased from Vercel.",
+    "description": "Information on how to send and receive emails with a domain purchased from Vercel.",
     "editUrl": "pages/knowledge/using-email-with-your-vercel-domain.mdx",
     "url": "/knowledge/using-email-with-your-vercel-domain",
     "published": "2020-05-18T18:54:36.000Z",
@@ -281,7 +289,7 @@
   },
   {
     "title": "How do I point a subdomain to a service outside of Vercel?",
-    "description": "Information on how to make a subdomain available to an service outside of Vercel.",
+    "description": "Information on how to make a subdomain available to a service outside of Vercel.",
     "editUrl": "pages/knowledge/pointing-subdomains-to-external-services.mdx",
     "url": "/knowledge/pointing-subdomains-to-external-services",
     "published": "2020-05-13T18:54:36.000Z",

@@ -11,7 +11,6 @@ import Main from '~/components/layout/main'
 import changeHash from '~/lib/utils/change-hash'
 import components from '~/lib/mdx-components'
 import Content from '~/components/layout/content'
-import VersionSwitcher from '~/components/layout/version-switcher'
 import Context from '~/lib/api/slugs-context'
 import DocsRuntime from '~/lib/api/runtime'
 import DocsIndex from '~/components/layout/index'
@@ -24,6 +23,7 @@ import ToggleGroup, { ToggleItem } from '~/components/toggle-group'
 import withPermalink from '~/lib/api/with-permalink'
 import HR from '~/components/text/hr'
 import { FooterFeedback } from '~/components/feedback-input'
+import Footer from '~/components/footer'
 
 const NonAmpOnly = ({ children }) => (useAmp() ? null : children)
 
@@ -32,11 +32,10 @@ const debouncedChangeHash = debounce(changeHash, 200)
 function ReferencePage({
   router,
   Data,
-  versioned,
   title,
   description,
   defaultActiveCategory,
-  defaultActiveSection
+  defaultActiveSection,
 }) {
   const [activeCategory, setActiveCategory] = useState(
     defaultActiveCategory || 'getting-started'
@@ -45,14 +44,13 @@ function ReferencePage({
   const [activeEntry, setActiveEntry] = useState(null)
   const [activeSubEntry, setActiveSubEntry] = useState(null)
   const [navigationActive, setNavigationActive] = useState(false)
-  const [version] = useState(router.asPath.split(/(v[0-9])/)[1] || 'v2')
   const [sidebarNode, setSidebarNode] = useState(null)
 
   const updateActive = ({
     category = null,
     section = null,
     entry = null,
-    subEntry = null
+    subEntry = null,
   }) => {
     if (
       activeCategory !== category ||
@@ -72,29 +70,23 @@ function ReferencePage({
     category = null,
     section = null,
     entry = null,
-    subEntry = null
+    subEntry = null,
   }) => {
     if (router.asPath.endsWith(href)) {
       updateActive({ category, section, entry, subEntry })
     }
   }
 
-  const handleSidebarRef = node => {
+  const handleSidebarRef = (node) => {
     setSidebarNode(node)
   }
 
-  const handleEntryActive = entryNode => {
+  const handleEntryActive = (entryNode) => {
     scrollToElement(sidebarNode, entryNode)
   }
 
-  const handleSectionActive = sectionNode => {
+  const handleSectionActive = (sectionNode) => {
     scrollToElement(sidebarNode, sectionNode)
-  }
-
-  const handleVersionChange = event => {
-    const href = `/docs/api/${event.target.value}`
-    router.push(href)
-    handleIndexClick()
   }
 
   const handleIndexClick = () => {
@@ -110,7 +102,7 @@ function ReferencePage({
         category: activeCategory,
         section: activeSection,
         entry: activeEntry,
-        subEntry: activeSubEntry
+        subEntry: activeSubEntry,
       })
     )
   }, [activeCategory, activeSection, activeEntry, activeSubEntry])
@@ -122,7 +114,7 @@ function ReferencePage({
         h1: withPermalink(components.h1),
         h2: withPermalink(components.h2),
         h3: withPermalink(components.h3),
-        h4: withPermalink(components.h4)
+        h4: withPermalink(components.h4),
       }}
     >
       <>
@@ -131,11 +123,7 @@ function ReferencePage({
           title={title || `${PRODUCT_NAME} Reference`}
           titlePrefix=""
           titleSuffix={` - ${ORG_NAME}`}
-        >
-          {versioned && version === 'v1' && (
-            <meta name="robots" content="noindex" />
-          )}
-        </Head>
+        ></Head>
 
         <DocsRuntime docs={Data}>
           {({ structure }) => (
@@ -143,7 +131,7 @@ function ReferencePage({
               <Sidebar
                 active={navigationActive}
                 innerRef={handleSidebarRef}
-                fixed
+                sticky
               >
                 <div className="toggle-group-wrapper">
                   <ToggleGroup>
@@ -178,7 +166,7 @@ function ReferencePage({
                     category: activeCategory,
                     section: activeSection,
                     entry: activeEntry,
-                    subEntry: activeSubEntry
+                    subEntry: activeSubEntry,
                   }}
                   getHref={getHref}
                   onEntryActive={handleEntryActive}
@@ -188,19 +176,11 @@ function ReferencePage({
                   updateActive={updateActive}
                   setInitiallyActive={setInitiallyActive}
                 />
-                {versioned && (
-                  <div className="select-wrapper">
-                    <VersionSwitcher
-                      version={version}
-                      onChange={handleVersionChange}
-                    />
-                  </div>
-                )}
               </Sidebar>
               <Content>
                 <div className="content">
                   <div>
-                    {structure.map(category => {
+                    {structure.map((category) => {
                       const categorySlugs = { category: category.slug }
                       return (
                         <div
@@ -211,16 +191,16 @@ function ReferencePage({
                           <Context.Provider
                             value={{
                               slugs: categorySlugs,
-                              updateActive
+                              updateActive,
                             }}
                           >
                             {category.content}
                           </Context.Provider>
 
-                          {category.sections.map(section => {
+                          {category.sections.map((section) => {
                             const sectionSlugs = {
                               category: category.slug,
-                              section: section.slug
+                              section: section.slug,
                             }
 
                             return (
@@ -232,17 +212,17 @@ function ReferencePage({
                                 <Context.Provider
                                   value={{
                                     slugs: sectionSlugs,
-                                    updateActive
+                                    updateActive,
                                   }}
                                 >
                                   {section.content}
                                 </Context.Provider>
                                 <div>
-                                  {section.entries.map(entry => {
+                                  {section.entries.map((entry) => {
                                     const entrySlugs = {
                                       category: category.slug,
                                       section: section.slug,
-                                      entry: entry.slug
+                                      entry: entry.slug,
                                     }
 
                                     return (
@@ -254,18 +234,18 @@ function ReferencePage({
                                         <Context.Provider
                                           value={{
                                             slugs: entrySlugs,
-                                            updateActive
+                                            updateActive,
                                           }}
                                         >
                                           {entry.content}
                                         </Context.Provider>
                                         <div>
-                                          {entry.subEntries.map(subEntry => {
+                                          {entry.subEntries.map((subEntry) => {
                                             const subEntrySlugs = {
                                               category: category.slug,
                                               section: section.slug,
                                               entry: entry.slug,
-                                              subEntry: subEntry.slug
+                                              subEntry: subEntry.slug,
                                             }
 
                                             return (
@@ -281,7 +261,7 @@ function ReferencePage({
                                                 <Context.Provider
                                                   value={{
                                                     slugs: subEntrySlugs,
-                                                    updateActive
+                                                    updateActive,
                                                   }}
                                                 >
                                                   {subEntry.content}
@@ -312,8 +292,17 @@ function ReferencePage({
             </Main>
           )}
         </DocsRuntime>
+        <Footer />
 
         <style jsx>{`
+          :global(.sidebar) {
+            position: sticky;
+            align-self: flex-start;
+            top: 64px;
+            max-height: calc(100vh - 64px);
+            overflow: auto;
+          }
+
           ul {
             list-style: none;
             margin: 0;

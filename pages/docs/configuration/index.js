@@ -2,7 +2,7 @@ import ConfigurationRef from '~/components/references-mdx/configuration/index.md
 import ReferenceLayout from '~/components/layout/reference'
 import { PRODUCT_NAME } from '~/lib/constants'
 
-export default () => (
+const Index = () => (
   <ReferenceLayout
     Data={<ConfigurationRef />}
     title="Configuration"
@@ -11,3 +11,5 @@ export default () => (
     defaultActiveSection="configuration-reference"
   />
 )
+
+export default Index

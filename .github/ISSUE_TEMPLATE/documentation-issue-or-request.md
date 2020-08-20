@@ -8,7 +8,7 @@ assignees: ''
 
 ## Documentation
 
-**URL(s)** if applicable to existing page(s): <!--- e.g. https://vercel.com/docs/v2/deployments/basics/ -->
+**URL(s)** if applicable to existing page(s): <!--- e.g. https://vercel.com/docs/deployments/basics/ -->
 **Brief Summary**: <!--- A brief summary of the documentation issue or request -->
 
 ## Additional Information

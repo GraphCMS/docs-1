@@ -11,9 +11,9 @@ With each new push, if <ProductShortName /> is already building a previous commi
 
 #### Updating the Production Domain
 
-If [Custom Domains](/docs/v2/custom-domains) are set from a project domains dashboard, pushes and merges to the [default branch](https://confluence.atlassian.com/bitbucket/branching-a-repository-223217999.html#BranchingaRepository-branching_modelThebranchingmodel) (commonly "master") will be made live to those domains with the latest deployment made with a push.
+If [Custom Domains](/docs/custom-domains) are set from a project domains dashboard, pushes and merges to the [Production Branch](/docs/git-integrations#production-branch) (commonly "main") will be made live to those domains with the latest deployment made with a push.
 
-If you decide to revert a commit that has already been deployed to production, the previous [Production Deployment](/docs/v2/platform/deployments#production) from a commit will automatically be made available at the [Custom Domain](/docs/v2/custom-domains) instantly; providing you with instant rollbacks.
+If you decide to revert a commit that has already been deployed to production, the previous [Production Deployment](/docs/platform/deployments#production) from a commit will automatically be made available at the [Custom Domain](/docs/custom-domains) instantly; providing you with instant rollbacks.
 
 #### Preview URLs for Each Pull Request
 
@@ -21,7 +21,9 @@ The latest push to any [pull request](https://www.atlassian.com/git/tutorials/ma
 
 <Image
   src={`${process.env.ASSETS}/docs/vercel-for-bitbucket/comment.png`}
-  width={1420/2.5}
-  height={720/2.5}
+  width={1420 / 2.5}
+  height={720 / 2.5}
 />
-<Caption style={{marginTop: '-40px'}}>A preview URL created from a pull request.</Caption>
+<Caption style={{ marginTop: '-40px' }}>
+  A preview URL created from a pull request.
+</Caption>

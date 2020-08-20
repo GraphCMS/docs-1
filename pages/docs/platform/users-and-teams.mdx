@@ -1,0 +1,115 @@
+import Doc from '~/components/layout/docs'
+import Link from '~/components/text/link'
+import Snippet from '~/components/snippet'
+import { Image } from '~/components/media'
+import Note from '~/components/text/note'
+import Caption from '~/components/text/caption'
+import ProductName from '~/components/name/product-name'
+import { PRODUCT_NAME } from '~/lib/constants'
+import OrgName from '~/components/name/org-name'
+import ProductShortName from '~/components/name/product-short-name'
+
+export const meta = {
+  title: 'Users and Teams',
+  description: `Using ${PRODUCT_NAME} with a scope of a user or a team and how to manage them.`,
+  editUrl: 'pages/docs/platform/users-and-teams.mdx',
+  lastEdited: '2020-08-04T23:22:45.000Z',
+}
+
+There are identity forms available on <ProductName />, called "scopes": Users and teams.
+
+When you signed up for our service the first time, you have created a user account. With this type of identity, you can enjoy all the features <ProductName /> has to offer and access to the data created by those features is limited to just your user account.
+
+## Sharing Your Data with Other People
+
+Firstly, it is important to understand that you should **never give any other person access to your own user account,** not under any circumstance.
+
+If you would like to share access to your deployments, domains, secrets or other resources with a co-worker, family member or any other kind of person, they first need to create their own user account on <ProductName />.
+
+Point them to this URL for signing up: [https://vercel.com/signup](/signup)
+
+Once they have created their own user account, you can create a team by clicking on the scope selector on the top left, and then choosing "Create a Team":
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1541367165/front/docs/users-and-teams/create-a-team.png`}
+  width={1138 / 2}
+  height={560 / 2}
+/>
+<Caption>
+  Creating a team from the account picker from the{' '}
+  <Link href="/dashboard">account dashboard</Link>.
+</Caption>
+
+After clicking the link, you will be asked to select whether you would like to set up your team with GitHub directly (which we highly suggest) and then to enter the URL of your future team. For this, please choose an accurate representation of your team's name:
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1541367164/front/docs/users-and-teams/team-url.png`}
+  width={1508 / 2}
+  height={510 / 2}
+/>
+<Caption>Setting the team URL when creating a team.</Caption>
+
+After you filled out the URL, you only need to hit "SAVE" in order for your team to be created.
+
+Next up, please click on the "Members" section of the menu on the top right. You will be presented with the list of people that are part of your team. At the moment, the list should only contain your own user account, as you have not yet invited any other people.
+
+In order to invite another person, click the "INVITE" button on the right and enter the email address of the user account of the person you would like to invite:
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1541367164/front/docs/users-and-teams/invite-members.png`}
+  width={1926 / 2}
+  height={962 / 2}
+/>
+<Caption>
+  Inviting additional team members from the team members dashboard.
+</Caption>
+
+After clicking the "INVITE" button the person is now part of your team and has access to all the resources (deployments, domains, certificates, etc.) created within your team.
+
+## Switching Between Users and Teams
+
+If you are part of one or multiple teams, you can choose which to show project information for or manage from the [<OrgName /> Dashboard](/dashboard). To do this, click on your avatar on the top left, then select the team of your choice:
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1541367165/front/docs/users-and-teams/team-dashboard.png`}
+  width={1124 / 2}
+  height={584 / 2}
+/>
+<Caption>
+  Switching teams from the account picker in the{' '}
+  <Link href="/dashboard">dashboard</Link>.
+</Caption>
+
+<Note>
+  You can also use{' '}
+  <Link href="/docs/cli#commands/switch">
+    <ProductShortName /> CLI
+  </Link>{' '}
+  to switch between users and teams when making{' '}
+  <Link href="/docs/platform/deployments#preview">Preview Deployments</Link>.
+</Note>
+
+## Changing the User or Team Settings
+
+Just like different scopes have different resources contained within them (access is limited to people that are members of the scope), they also allow for different configurations.
+
+As you read above, all our interfaces allow switching between scopes without hassle. Once you have switched to the scope of your choice on the dashboard, you can click the little cog icon on the top left in order to configure the scope:
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1541367164/front/docs/users-and-teams/user-settings.png`}
+  width={700 / 2}
+  height={276 / 2}
+/>
+<Caption>
+  Switching teams from the <OrgName /> Dashboard account bar.
+</Caption>
+
+After clicking the button, you will be presented a series of fields that you can adjust to your needs. Any changes you make to those fields are entirely unrelated to any other scopes and do not affect them in any way.
+
+Only the scope that is indicated using the avatar icon on the top left is affected.
+
+export default ({ children }) => <Doc meta={meta}>{children}</Doc>
+
+export const config = {
+  amp: 'hybrid',
+}

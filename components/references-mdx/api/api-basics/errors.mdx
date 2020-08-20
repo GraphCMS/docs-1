@@ -1,0 +1,21 @@
+import { Code } from '~/components/text/code'
+import Caption from '~/components/text/caption'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/api-basics/errors.mdx',
+  lastEdited: '2019-10-17T14:44:04.000Z',
+}
+
+## Errors
+
+All API endpoints contain a `code` and `message` within the error responses, though some API endpoints extend the `error` object to contain other information. Each endpoint that does this will be documented in their appropriate section.
+
+While we recommend that you write error messages that fit your needs and provide your users with the best experience, our `message` fields are designed to be neutral, not contain sensitive information, and can be safely passed down to user interfaces.
+
+<Code lang="json">{`{
+  "error": {
+    "code": "forbidden",
+    "message": "Not authorized"
+  }
+}`}</Code>
+<Caption>An example of an unauthorized request error.</Caption>

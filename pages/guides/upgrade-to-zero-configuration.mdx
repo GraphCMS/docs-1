@@ -14,7 +14,8 @@ export const meta = {
   authors: ['mcsdev', 'timothy', 'skllcrn'],
   url: '/guides/upgrade-to-zero-configuration',
   editUrl: 'pages/guides/upgrade-to-zero-configuration.mdx',
-  lastEdited: '2020-06-04T20:10:32.000Z'
+  lastEdited: '2020-08-04T23:22:45.000Z',
+  rank: 16,
 }
 
 With zero configuration, it's never been easier to deploy an app with <ProductName />. This guide highlights a set of common scenarios, showing you how to take advantage of these new features.
@@ -185,7 +186,7 @@ module.exports = (req, res) => {
 
 <Caption>
   An example Node.js Serverless Function that uses Path Segments through{' '}
-  <Link href="/docs/v2/serverless-functions/supported-languages#node.js-helpers">
+  <Link href="/docs/serverless-functions/supported-languages#node.js-helpers">
     helper methods
   </Link>{' '}
   with <ProductName />.
@@ -194,5 +195,5 @@ module.exports = (req, res) => {
 export default ({ children }) => <Guide meta={meta}>{children}</Guide>
 
 export const config = {
-  amp: 'hybrid'
+  amp: 'hybrid',
 }

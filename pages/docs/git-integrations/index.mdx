@@ -1,0 +1,160 @@
+import Doc from '~/components/layout/docs'
+import Card from '~/components/card'
+import { Image } from '~/components/media'
+import Caption from '~/components/text/caption'
+import Note from '~/components/text/note'
+import Collapse, { CollapseGroup } from '~/components/collapse'
+import { IconCard } from '~/components/card'
+import { List } from '~/components/list'
+import BitbucketIcon from '~/components/icons/bitbucket'
+import GitLabIcon from '~/components/icons/gitlab'
+import GitHubIcon from '~/components/icons/github'
+import ProductName from '~/components/name/product-name'
+import { PRODUCT_NAME } from '~/lib/constants'
+
+export const meta = {
+  title: 'Git Integrations',
+  description: `How to use the ${PRODUCT_NAME} Git Integrations for GitHub, GitLab, or Bitbucket to automatic deploy from your project's repository for each push and ship to production on merge to the main branch.`,
+  image: `${process.env.ASSETS}/docs/git-integrations/git-push.png`,
+  editUrl: 'pages/docs/git-integrations/index.mdx',
+  lastEdited: '2020-08-19T17:03:49.000Z',
+}
+
+​​<ProductName /> provides integrations for your [GitHub](/docs/v2/git-integrations/vercel-for-github), [GitLab](/docs/v2/git-integrations/vercel-for-gitlab), and [Bitbucket](/docs/v2/git-integrations/vercel-for-bitbucket) projects, allowing for **automatic deployments on every branch push** and merge to the [Production Branch](#production-branch).
+
+<Image
+  src={`${process.env.ASSETS}/docs/git-integrations/git-push.png`}
+  width={2080 / 3}
+  height={1440 / 3}
+/>
+
+The <ProductName /> Git Integrations provide the following benefits:
+
+- [Preview Deployments](/docs/v2/platform/deployments#preview) for every push.
+- [Production Deployments](/docs/v2/platform/deployments#production) for the most recent changes from the [Production Branch](#production-branch).
+- Instant rollbacks when reverting changes assigned to a custom domain.
+
+The easiest way to use a Git Integration is to think of your **`main` branch as production**. Every time a pull/merge request is made to that branch, <ProductName /> will **create a unique deployment**, allowing you to **view the changes in a preview environment before merging**.
+
+In this case, `main` is the Production Branch. When merging to the Production Branch, a **Production Deployment** is made, making the latest changes available to assigned custom domains automatically.
+
+You can choose to use a different branch as the [Production Branch](#production-branch).
+
+## Available Integrations
+
+Click any Git Integration from the list below to skip to its section:
+
+<List columnsDesktop={3} columnsTablet={3} columnsMobile={1}>
+  <IconCard
+    label="GitHub"
+    icon={<GitHubIcon />}
+    href="/docs/v2/git-integrations/vercel-for-github"
+    arrowed
+  />
+  <IconCard
+    label="GitLab"
+    icon={<GitLabIcon />}
+    href="/docs/v2/git-integrations/vercel-for-gitlab"
+    arrowed
+  />
+  <IconCard
+    label="Bitbucket"
+    icon={<BitbucketIcon />}
+    href="/docs/v2/git-integrations/vercel-for-bitbucket"
+    arrowed
+  />
+</List>
+
+## Quick Installation
+
+You can install any Git Integration directly from your dashboard by clicking ["Import Project"](/import) followed by ["Import Git Repository"](/import/git). Then enter the URL of your GitHub, GitLab, or Bitbucket repository to connect and import it.
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/github-from-existing-code.png`}
+  width={1280 / 2}
+  height={588 / 2}
+  shadow
+  borderRadius
+/>
+<Caption>
+  Installing the Git Integration for a Git provider of your choice.
+</Caption>
+
+## Deploying Private Git Repositories
+
+In order to deploy commits from a private Git Repository (or a fork of a private Git Repository) under a Team, the commit author has to be a member of the Team on <ProductName /> (even if the commit author is a bot).
+
+If the commit author is not a member, the Deployment will be prevented and a request to join the Team will automatically be issued for the commit author. After that, the owners of the Team will be notified and can either accept or decline the membership request on the "Members" page in the Team Settings.
+
+Declining the request will leave the commit undeployed. If the commit author gets accepted as a member of the Team, however, their most recent commit will resume to be deployed to <ProductName /> automatically.
+
+Commit authors will automatically be considered a part of the Team on <ProductName /> if one of the existing members connected their Personal Account on <ProductName /> with the Git account that created the commit.
+
+## Production Branch
+
+A [Production Deployment](/docs/v2/platform/deployments#production) will be created each time you merge to the **Production Branch**.
+
+### Default Configuration
+
+When you create a new Project from a Git repository on <ProductName />, the Production Branch will be selected in the following order:
+
+- The `main` branch.
+- If not present, the `master` branch ([more details](https://vercel.com/blog/custom-production-branch#a-note-on-the-master-branch)).
+- [Only for Bitbucket] If not present, the "Production Branch" setting of your Git repository is used.
+- If not present, the Git repository's default branch.
+
+### Customizing the Production Branch
+
+On the **Git Integration** page in the **Project Settings**, you can change your Production Branch to be one of the following:
+
+- The `main` branch.
+- The Git repository's default branch (for Bitbucket, the Git repository's "Production Branch" setting is considered).
+- Any other custom branch of your choice.
+
+Whenever a new commit is then pushed to the branch you configured here, a [Production Deployment](/docs/v2/platform/deployments#production) will be created for you.
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/production-branch-configuration.png`}
+  width={1488 / 2}
+  height={536 / 2}
+  shadow
+  borderRadius
+/>
+<Caption>Configuring the Production Branch of your Project.</Caption>
+
+## Monorepos
+
+If you'd like to deploy multiple different directories within the same Git repository,
+you can do so by creating a separate Project for each directory and configuring the [Root Directory setting](/docs/build-step?query=root%20directory#root-directory) for it.
+
+The easiest way to achieve this is by [importing your Git repository](/docs/v2/git-integrations#quick-installation) multiple times and selecting a different
+Root Directory every time – until one Project was created for each of the relevant directories.
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/monorepo-import.png`}
+  width={1284 / 2}
+  height={966 / 2}
+  shadow
+  borderRadius
+/>
+<Caption>Selecting a Root Directory for one of your new Projects.</Caption>
+
+Once you've created a separate Project for each of the directories within your Git repository,
+every commit will issue a Deployment for all connected Projects and display the resulting URLs on your pull requests and commits:
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/monorepo-pr.png`}
+  width={1832 / 2}
+  height={702 / 2}
+/>
+<Caption>An example of Deployment URLs provided by a Git Integration.</Caption>
+
+Up to 20 Projects can be connected to the same Git repository. If you need to connect more, please [contact us](/support/request).
+
+Additionally, monorepos are currently only supported with the [GitHub Integration](/github). Support for [GitLab](/gitlab) and [Bitbucket](/bitbucket) are upcoming.
+
+export default ({ children }) => <Doc meta={meta}>{children}</Doc>
+
+export const config = {
+  amp: 'hybrid',
+}

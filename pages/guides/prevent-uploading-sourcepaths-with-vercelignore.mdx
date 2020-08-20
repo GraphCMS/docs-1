@@ -14,7 +14,7 @@ export const meta = {
   authors: ['unicodeveloper', 'mcsdev'],
   url: '/guides/prevent-uploading-sourcepaths-with-vercelignore',
   editUrl: 'pages/guides/prevent-uploading-sourcepaths-with-vercelignore.mdx',
-  lastEdited: '2020-05-14T22:27:16.000Z'
+  lastEdited: '2020-08-04T23:22:45.000Z',
 }
 
 [<ProductName />](/) supports configuration required to ignore source files and paths within your project. With a `.vercelignore` file in your project directory, a source path can be prevented from being uploaded to <ProductName />.
@@ -59,7 +59,7 @@ Aside from the [default exclusions](/docs/v2/build-step/#ignored-files-and-folde
 <Note>
   You can find the complete list of files and directories excluded by default in
   the{' '}
-  <Link href="/docs/v2/build-step/#ignored-files-and-folders">
+  <Link href="/docs/build-step/#ignored-files-and-folders">
     <ProductName /> documentation
   </Link>
   .
@@ -76,5 +76,5 @@ The use of a `.vercelignore` configuration file allows you to keep private files
 export default ({ children }) => <Guide meta={meta}>{children}</Guide>
 
 export const config = {
-  amp: 'hybrid'
+  amp: 'hybrid',
 }

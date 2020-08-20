@@ -1,0 +1,292 @@
+import { Code, InlineCode } from '~/components/text/code'
+import { HelpLink } from '~/components/text/link'
+import Endpoint from '~/components/api/endpoint'
+import Request from '~/components/api/request'
+import Caption from '~/components/text/caption'
+import { API_ENDPOINT } from '~/lib/constants'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/endpoints/aliases.mdx',
+  lastEdited: '2019-10-28T15:40:57.000Z',
+}
+
+## Aliases
+
+### List all the aliases
+
+<Endpoint method="GET" url="/v3/now/aliases" />
+
+Retrieves active aliases for the authenticated account. By default it returns
+the last 20 aliases if no `limit` is provided.
+
+#### Request Query Parameters
+
+The response of this API can be controlled with the following optional query parameters.
+
+| Key           | Description                                           |
+| ------------- | ----------------------------------------------------- |
+| **limit**     | Maximum number of aliases to list from a request.     |
+| **since**     | Get aliases created after this JavaScript timestamp.  |
+| **until**     | Get aliases created before this JavaScript timestamp. |
+| **projectId** | Filter aliases from the given `projectId`.            |
+
+The body will contain an entry for each alias.
+
+#### Response Parameters
+
+| Key              | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                               |
+| ---------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------- |
+| **uid**          | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the alias.                                       |
+| **alias**        | <HelpLink href="#api-basics/types">String</HelpLink>       | The alias name, it could be a `.now.sh` subdomain or a custom domain.     |
+| **created**      | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the alias was created.                                      |
+| **createdAt**    | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the alias was created in milliseconds since the UNIX epoch. |
+| **updatedAt**    | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the alias was updated in milliseconds since the UNIX epoch. |
+| **deployment**   | <HelpLink href="#api-basics/types">Map</HelpLink>          | A map with the deployment ID and URL.                                     |
+| **deploymentId** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The deployment ID.                                                        |
+| **projectId**    | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the project.                                     |
+
+#### Deployment
+
+This is the format of the `deployment` described above.
+
+| Key     | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                       |
+| ------- | ---------------------------------------------------------- | --------------------------------- |
+| **id**  | <HelpLink href="#api-basics/types">ID</HelpLink>           | The deployment unique identifier. |
+| **url** | <HelpLink href="#api-basics/types">String</HelpLink>       | The deployment unique URL.        |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v3/now/aliases`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "aliases": [
+    {
+      "uid": "2WjyKQmM8ZnGcJsPWMrHRHrE",
+      "alias": "my-alias",
+      "created": "2016-06-02T21:01:40.950Z",
+      "createdAt": 1464894100000,
+      "updatedAt": 1464895100000,
+      "projectId": "QmXGTs7mvAMMC7WW5ebrM33qKG32QK3h4vmQMjmY",
+      "deployment": {
+        "id": "c9MrOWGzdJSfPxqyTDYhdEGN",
+        "url": "my-app-fjvngszyiq.now.sh"
+      },
+      "deploymentId": "c9MrOWGzdJSfPxqyTDYhdEGN"
+    },
+    {
+      "uid": "CR3bdJZkiaAuh9yr0OHXJJPG",
+      "alias": "my-alias-2",
+      "created": "2016-06-01T21:03:10.420Z",
+      "createdAt": 1464807790000,
+      "updatedAt": 1464808790000,
+      "projectId": "QmXGTs7mvAMMC7WW5ebrM33qKG32QK3h4vmQMjmY",
+      "rules": [
+          {
+              "pathname": "/",
+              "dest": "my-app-fjvngszyiq.now.sh"
+          },
+          {
+              "dest": "my-api-ibzcpajvlo.now.sh"
+          }
+      ]
+    }
+  ],
+  "pagination": {
+    "count": 2,
+    "next": 1464807790000,
+    "prev": 1464894100000
+  }
+}`}</Code>
+
+### Get a Single Alias
+
+<Endpoint>
+  GET /v2/now/aliases/:id
+  <br />
+  GET /v2/now/aliases/:name
+</Endpoint>
+
+Get the information for a specific alias by passing either the alias `id` or `name` in the URL.
+
+#### Response Parameters
+
+| Key              | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------- |
+| **uid**          | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the alias.                        |
+| **alias**        | <HelpLink href="#api-basics/types">String</HelpLink>       | The name of the alias.                                     |
+| **deployment**   | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing the `id` and `url` of the deployment. |
+| **created**      | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the alias was created.                       |
+| **projectId**    | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the project.                      |
+| **deploymentId** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the deployment.                   |
+
+##### Example Request
+
+<Request
+  method="GET"
+  url={`${API_ENDPOINT}/v2/now/aliases/2WjyKQmM8ZnGcJsPWMrHRHrE`}
+  auth
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "uid": "2WjyKQmM8ZnGcJsPWMrHRHrE",
+  "alias": "my-alias.now.sh",
+  "deployment": {
+    "id": "dpl_2MfpYzxMJiiPVRs7ZYqo8US9dynT",
+    "url": "my-alias-repfs93ww.now.sh"
+  },
+  "created": "2019-07-17T17:33:35.374Z",
+  "projectId": "QmPMW4P9rKjheg6k3MckC7yZjRwMB6FdE8SZBerRvHWnYs",
+  "deploymentId": "dpl_2MfpYzxMJiiPVRs7ZYqo8US9dynT"
+}`}</Code>
+
+### Remove an Alias
+
+<Endpoint method="DELETE" url="/v2/now/aliases/:id" />
+
+The API allows you to delete an alias by supplying the alias `:id` in the url.
+You can obtain this id from the list of aliases.
+
+#### Response Parameters
+
+| Key        | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                            |
+| ---------- | ---------------------------------------------------------- | -------------------------------------- |
+| **status** | <HelpLink href="#api-basics/types">String</HelpLink>       | If the alias was successfully removed. |
+
+##### Example Request
+
+<Request
+  method="DELETE"
+  url={`${API_ENDPOINT}/v2/now/aliases/2WjyKQmM8ZnGcJsPWMrHRHrE`}
+  auth
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "status": "SUCCESS"
+}`}</Code>
+
+### Purge Alias in the CDN
+
+<Endpoint method="PURGE" url="/v2/now/aliases/:id" />
+
+Purges [the CDN](/docs/domains-and-aliases/cdn) of content from the given alias via `:id`.
+
+#### Response Parameters
+
+| Key        | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                       |
+| ---------- | ---------------------------------------------------------- | ----------------------------------------------------------------- |
+| **status** | <HelpLink href="#api-basics/types">String</HelpLink>       | The status of the purge request. The value should be `REQUESTED`. |
+
+##### Example `PURGE` Request
+
+<Request method="PURGE" url={`${API_ENDPOINT}/v2/now/aliases/:id`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "status": "REQUESTED"
+}`}</Code>
+
+### List aliases by deployment
+
+<Endpoint method="GET" url="/v2/now/deployments/:id/aliases" />
+
+Retrieves all of the aliases for the deployment with the given `:id`.
+The authenticating user must own this deployment.
+The body will contain an entry for each alias.
+
+#### Response Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                       |
+| ----------- | ---------------------------------------------------------- | ------------------------------------------------- |
+| **aliases** | <HelpLink href="#api-basics/types">List</HelpLink>         | A list of the aliases assigned to the deployment. |
+
+#### Alias
+
+This is the format of each item in the `aliases` list.
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                           |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------- |
+| **uid**     | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the alias.                                   |
+| **alias**   | <HelpLink href="#api-basics/types">String</HelpLink>       | The alias name, it could be a `.now.sh` subdomain or a custom domain. |
+| **created** | <HelpLink href="#api-basics/types">String</HelpLink>       | The date when the alias was created.                                  |
+
+##### Example Request
+
+<Request
+  url={`${API_ENDPOINT}/v2/now/deployments/7Npest0z1zW5QVFfNDBId4BW/aliases`}
+  auth
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "aliases": [
+    {
+      "uid": "2WjyKQmM8ZnGcJsPWMrHRHrE",
+      "alias": "my-alias",
+      "created": "2016-06-02T21:01:40.950Z",
+    }
+  ]
+}`}</Code>
+
+### Assign an alias to a deployment
+
+<Endpoint method="POST" url="/v2/now/deployments/:id/aliases" />
+
+Creates a new alias for the deployment with the given `:id`. The authenticated user must own this deployment.
+
+The JSON body of the POST should contain an `alias` key with the desired alias (hostname or custom url).
+
+If the desired alias was used before it will be removed from the old deployment and assigned to the new one.
+
+#### Request Parameters
+
+| Key          | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Required | Description                                                                                                                                                                         |
+| ------------ | ---------------------------------------------------------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **alias**    | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | The alias we want to assign to the deployment defined in the URL.                                                                                                                   |
+| **redirect** | <HelpLink href="#api-basics/types">String</HelpLink>       | No       | The redirect property will take precedence over the deployment id from the URL and consists of a hostname (like test.com) to which the alias should redirect using status code 307. |
+
+#### Response Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                               |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| **oldID**   | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the previously aliased deployment, only received when the alias was used before. |
+| **uid**     | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the alias.                                                                       |
+| **created** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the alias was created.                                                                      |
+
+##### Example Request
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v2/now/deployments/7Npest0z1zW5QVFfNDBId4BW/aliases`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    alias: 'my-alias.now.sh',
+  }}
+/>
+
+##### Example Response (new alias)
+
+<Code lang="json">{`{
+  "uid": "2WjyKQmM8ZnGcJsPWMrHRHrE",
+  "created": "2016-06-02T21:01:40.950Z"
+}`}</Code>
+
+##### Example Response (alias with existing deployment)
+
+(<InlineCode>oldId</InlineCode> is the id of the previous deployment):
+
+<Code lang="json">{`{
+  "oldId": "c9MrOWGzdJSfPxqyTDYhdEGN",
+  "uid": "2WjyKQmM8ZnGcJsPWMrHRHrE",
+  "created": "2016-06-02T21:01:40.950Z"
+}`}</Code>

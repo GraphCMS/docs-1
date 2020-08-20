@@ -2,16 +2,16 @@
 # https://help.github.com/en/articles/about-code-owners
 
 *                                            @chibicode @mcsdevv
-pages/docs/v2/introduction.mdx               @joecohens @paulogdm @chibicode
-pages/docs/v2/build-step.mdx                 @AndyBitz @TooTallNate @chibicode
-pages/docs/v2/custom-domains.mdx             @anatrajkovska @javivelasco @mglagola @joecohens @chibicode
-pages/docs/v2/serverless-functions/          @AndyBitz @TooTallNate @chibicode @matheuss
-pages/docs/v2/edge-network/                  @juancampa @hharnisc @dav-is @joecohens @chibicode @matheuss
-pages/docs/v2/platform/                      @styfle @joecohens @chibicode
-pages/docs/v2/git-integrations/              @arunoda @chibicode
+pages/docs/introduction.mdx                  @joecohens @paulogdm @chibicode
+pages/docs/build-step.mdx                    @AndyBitz @TooTallNate @chibicode
+pages/docs/custom-domains.mdx                @anatrajkovska @javivelasco @mglagola @joecohens @chibicode
+pages/docs/serverless-functions/             @AndyBitz @TooTallNate @chibicode @matheuss
+pages/docs/edge-network/                     @juancampa @hharnisc @dav-is @joecohens @chibicode @matheuss
+pages/docs/platform/                         @styfle @joecohens @chibicode
+pages/docs/git-integrations/                 @arunoda @chibicode
 pages/docs/configuration                     @styfle @AndyBitz @joecohens @chibicode
-pages/docs/v2/advanced/deploy-hooks.mdx      @anatrajkovska @javivelasco @mglagola @joecohens @chibicode
-pages/docs/v2/advanced/builders.mdx          @AndyBitz @styfle @joecohens @chibicode
+pages/docs/advanced/deploy-hooks.mdx         @anatrajkovska @javivelasco @mglagola @joecohens @chibicode
+pages/docs/advanced/builders.mdx             @AndyBitz @styfle @joecohens @chibicode
 pages/docs/api/                              @anatrajkovska @arunoda @javivelasco @mglagola @chibicode
 pages/docs/integrations/                     @arunoda @chibicode
 pages/docs/error/                            @juancampa @dav-is @joecohens @chibicode

@@ -9,7 +9,7 @@ import { Image } from '~/components/media'
 import ProductName from '~/components/name/product-name'
 import OrgName from '~/components/name/org-name'
 import ProductShortName from '~/components/name/product-short-name'
-import { SYSTEM_ENVS } from '~/lib/data/v2/system-env-variables'
+import { SYSTEM_ENVS } from '~/lib/data/system-env-variables'
 import SystemEnvVariablesTable from '~/components/env-variables/system-env-variables-table'
 
 When you trigger a deploy, <ProductName /> **builds** your project. For many frontend frameworks, <ProductName /> automatically configures the build settings, but you can also [customize](#customizing-build-settings) them. You can also use [environment variables](#environment-variables) to avoid hardcoding values.
@@ -24,7 +24,9 @@ To customize the build settings for your project, choose a project from the [das
   height={410 / 2}
   shadow
 />
-<Caption>Selecting the project from the <OrgName /> Dashboard.</Caption>
+<Caption>
+  Selecting the project from the <OrgName /> Dashboard.
+</Caption>
 
 Then, select the **Settings** tab:
 
@@ -35,7 +37,9 @@ Then, select the **Settings** tab:
   shadow
   borderRadius
 />
-<Caption>Selecting the <b>Settings</b> tab from the Project Overview page.</Caption>
+<Caption>
+  Selecting the <b>Settings</b> tab from the Project Overview page.
+</Caption>
 
 You can then edit the build settings from the **Build & Development Settings**, **Root Directory**, and **Environment Variables** sections.
 
@@ -137,7 +141,7 @@ In some cases, your project might not require building, and you might just want 
   <InlineCode>vercel dev</InlineCode> locally to develop your project. You
   should be using <InlineCode>vercel dev</InlineCode> only if you need to use a{' '}
   <ProductName /> platform feature like{' '}
-  <Link href="/docs/v2/serverless-functions/introduction">
+  <Link href="/docs/serverless-functions/introduction">
     Serverless Functions
   </Link>
   . In other cases, you should use the development command your framework provides
@@ -180,23 +184,23 @@ Environment Variables are accessible during both **Build Step** and **Runtime**,
 
 This allows you to include values that you don't want to share in your code or to change the behavior of your code depending on its Environment.
 
-To declare an Environment Variable for your deployment, head to the **General** page of your **Project Settings** and locate the **Environment Variables** section.
+To declare an Environment Variable for your deployment, head to the **Environment Variables** page of your **Project Settings**.
 
 <Image
   src={`${process.env.ASSETS}/docs/build-step/env-vars-empty.png`}
-  width={1488 / 2}
-  height={824 / 2}
+  width={1610 / 2}
+  height={800 / 2}
   shadow
 />
 <Caption>The Environment Variables settings.</Caption>
 
 First, choose between the following **Environments**:
 
-| Environment     | Description                                                                                                                                                                                           |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Production**  | When selected, the Environment Variable will be applied to your next Production Deployment. To create a Production Deployment, push a commit to the default branch or run `vercel --prod`.            |
-| **Preview**     | The Environment Variable is applied to your next Preview Deployment. Preview Deployments are created when you push to a branch (for example, `my-new-feature`) or run `vercel`.                       |
-| **Development** | The Environment Variable is for use when running your project locally, with `vercel dev` or your preferred development command. To download Development Environment Variables, run `vercel env pull`. |
+| Environment     | Description                                                                                                                                                                                                                               |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Production**  | When selected, the Environment Variable will be applied to your next Production Deployment. To create a Production Deployment, push a commit to the [Production Branch](/docs/git-integrations#production-branch) or run `vercel --prod`. |
+| **Preview**     | The Environment Variable is applied to your next Preview Deployment. Preview Deployments are created when you push to a branch (for example, `my-new-feature`) or run `vercel`.                                                           |
+| **Development** | The Environment Variable is for use when running your project locally, with `vercel dev` or your preferred development command. To download Development Environment Variables, run `vercel env pull`.                                     |
 
 Enter the **Name** of the Environment Variable. For example, if you are using Node.js and you create an Environment Variable named `SENTRY_KEY`, it will be available under `process.env.SENTRY_KEY` in your code.
 
@@ -204,8 +208,8 @@ Then, enter the **Value** of the Environment Variable. The value is automaticall
 
 <Image
   src={`${process.env.ASSETS}/docs/build-step/env-vars-user.png`}
-  width={1488 / 2}
-  height={632 / 2}
+  width={1610 / 2}
+  height={630 / 2}
   shadow
 />
 <Caption>Adding an Environment Variable in the Project Settings.</Caption>
@@ -215,7 +219,7 @@ It can then be consumed during **Build Step** by the framework of your choice, o
 
 <Note>
   If any Environment Variables differ between Deployments,{' '}
-  <Link href="/docs/v2/platform/deployments#deduplication">deduplication</Link>{' '}
+  <Link href="/docs/platform/deployments#deduplication">deduplication</Link>{' '}
   will always be bypassed. For example, this means that merging to the default
   branch will no longer result in an instant deployment.
 </Note>
@@ -224,10 +228,17 @@ It can then be consumed during **Build Step** by the framework of your choice, o
 
 Environment Variables created for the Development Environment can be downloaded into a local development setup using the `vercel env pull` command provided by [<ProductShortName /> CLI](/download):
 
-<Snippet clipboard={false} dark text={`vercel env pull
+<Snippet
+  width="100%"
+  clipboard={false}
+  dark
+  text={`vercel env pull
 Downloading Development Environment Variables for project my-lovely-project
-✅ Created .env file [510ms]`} />
-<Caption>Downloading Development Environment Variables with `vercel env pull`.</Caption>
+✅ Created .env file [510ms]`}
+/>
+<Caption>
+  Downloading Development Environment Variables with `vercel env pull`.
+</Caption>
 
 Running the command will create a `.env` file in your project folder. The `.env` file can then be consumed by `vercel dev` or
 your preferred development command.
@@ -241,11 +252,13 @@ In that case, the Integration Configuration that added it will be displayed:
 
 <Image
   src={`${process.env.ASSETS}/docs/build-step/env-vars-integration.png`}
-  width={1488 / 2}
-  height={728 / 2}
+  width={1610 / 2}
+  height={740 / 2}
   shadow
 />
-<Caption>Adding an Integration Environment Variable in the Project Settings.</Caption>
+<Caption>
+  Adding an Integration Environment Variable in the Project Settings.
+</Caption>
 
 <Note>
   Support for Integration Environment Variables was added on April 10th, 2020.
@@ -261,8 +274,8 @@ To apply a System Environment Variable to your Deployment, enter its **Name**, l
 
 <Image
   src={`${process.env.ASSETS}/docs/build-step/env-vars-system.png`}
-  width={1488 / 2}
-  height={632 / 2}
+  width={1610 / 2}
+  height={740 / 2}
   shadow
 />
 <Caption>Adding a System Environment Variable in the Project Settings.</Caption>
@@ -273,21 +286,27 @@ The following System Environment Variables are available:
 
 ### Reserved Environment Variables
 
-The <ProductName /> platform reserves the usage of some Environment Variable names by default. You can find a list of these names in the [limits documentation](/docs/v2/platform/limits/#reserved-variables).
+The <ProductName /> platform reserves the usage of some Environment Variable names by default. You can find a list of these names in the [limits documentation](/docs/platform/limits/#reserved-variables).
+
+### Using a `.env` File
+
+We generally recommend only adding your Environment Variables in the [Project Settings](#environment-variables), as that's the only way to achieve different Environment Variables based on the Environment (Development, Preview or Production).
+
+Therefore, it's not necessary to use a `.env` file or configure Environment Variables within the `vercel.json` file.
 
 ## Ignored Files and Folders
 
 By default, <ProductName /> ignores certain files and folders for security and performance reasons, preventing them from being uploaded during the deployment process.
 
 ```bash
-.hg/
-.git/
+.hg
+.git
 .gitmodules
-.svn/
+.svn
 .cache
-.next/
-.now/
-.vercel/
+.next
+.now
+.vercel
 .npmignore
 .dockerignore
 .gitignore
@@ -300,9 +319,9 @@ By default, <ProductName /> ignores certain files and folders for security and p
 .venv
 npm-debug.log
 config.gypi
-node_modules/
-__pycache__/
-venv/
+node_modules
+__pycache__
+venv
 CVS
 ```
 
@@ -337,6 +356,11 @@ If a deployment fails, a cache may still be established for successfully built f
 To install private npm modules, define `NPM_TOKEN` as a [build environment variable](/docs/configuration#project/build-env) in a `vercel.json` file.
 
 Alternatively, define `NPM_RC` as a [build environment variable](/docs/configuration#project/build-env) with the contents of `~/.npmrc`.
+
+### Git Submodules
+
+Deploying Git submodules with the [Git Integration](/docs/git-integrations) is supported as long as the submodule is publicly accessible via the HTTP protocol.
+Git submodules that are private or requested over SSH will fail during the Build step.
 
 ### Prevent Installing Development Dependencies
 
@@ -397,12 +421,12 @@ For example, defining the Hugo version in a `vercel.json` file would look like t
 
 For more information on what to do next, we recommend the following articles:
 
-<Card title="Git Integration" href="/docs/v2/git-integrations">
+<Card title="Git Integration" href="/docs/git-integrations">
   Learn more about how <ProductName /> integrates with Git to make your workflow
   easier.
 </Card>
 
-<Card title="Deploy Hooks" href="/docs/v2/advanced/deploy-hooks">
+<Card title="Deploy Hooks" href="/docs/advanced/deploy-hooks">
   Use Deploy Hooks to trigger deployments to build content from outside{' '}
   <OrgName />.
 </Card>

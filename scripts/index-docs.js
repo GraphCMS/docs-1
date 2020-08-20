@@ -7,7 +7,7 @@ const globby = require('globby')
 const md5 = require('md5')
 
 const execP = promisify(execSync)
-const exec = cmd => execP(cmd)
+const exec = (cmd) => execP(cmd)
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
 const nextConfigPath = 'next.config.js'
@@ -41,28 +41,23 @@ async function main() {
     files = await globby([
       'dist/guides/**/*.html',
       'dist/knowledge/**/*.html',
-      'dist/docs/v2/**/*.html',
-      'dist/docs/api.html',
-      'dist/docs/integrations.html',
-      'dist/docs/cli.html',
-      'dist/docs/configuration.html',
-      'dist/docs/runtimes.html'
+      'dist/docs/**/*.html',
     ])
     // filter out AMP pages
-    files = files.filter(f => f.indexOf('.amp/index.html') < 0)
+    files = files.filter((f) => f.indexOf('.amp/index.html') < 0)
   } catch (e) {
     throw `Failed to get pages: ${e}`
   }
 
   // Loop through files
-  files.forEach(file => {
+  files.forEach((file) => {
     const isAPISection = !!file.startsWith('dist/docs/api')
     const isRefSection =
       !!file.startsWith('dist/docs/cli') ||
       !!file.startsWith('dist/docs/runtimes') ||
       !!file.startsWith('dist/docs/configuration') ||
       !!file.startsWith('dist/docs/integrations')
-    const isDocs = !!file.startsWith('dist/docs/v2')
+    const isDocs = !!file.startsWith('dist/docs/') && !isRefSection
     const isGuides = !!file.startsWith('dist/guides')
     const isKnowledge = !!file.startsWith('dist/knowledge')
 
@@ -93,9 +88,7 @@ async function main() {
         // Set current heading:
         currentHeading = {
           text: currentEl.text(),
-          anchor: $(currentEl)
-            .children('a')
-            .attr('href')
+          anchor: $(currentEl).children('a').attr('href'),
         }
 
         if (tag === 'h1') {
@@ -135,8 +128,8 @@ async function main() {
               (isRefSection && 'reference') ||
               (isDocs && 'docs') ||
               (isGuides && 'guide') ||
-              (isKnowledge && 'knowledge')
-          ]
+              (isKnowledge && 'knowledge'),
+          ],
         }
 
         // Push record to index array

@@ -1,0 +1,367 @@
+import Doc from '~/components/layout/docs'
+import Snippet from '~/components/snippet'
+import Caption from '~/components/text/caption'
+import Note from '~/components/text/note'
+import Link from '~/components/text/link'
+import Card from '~/components/card'
+import { Image } from '~/components/media'
+import { InlineCode } from '~/components/text/code'
+import ProductName from '~/components/name/product-name'
+import OrgName from '~/components/name/org-name'
+import { PRODUCT_NAME } from '~/lib/constants'
+
+export const meta = {
+  title: 'Custom Domains',
+  description: 'How to add and use a custom domain with your project.',
+  editUrl: 'pages/docs/custom-domains.mdx',
+  lastEdited: '2020-08-14T08:50:54.000Z',
+}
+
+By default, all deployments are assigned a `.vercel.app` suffixed domain.
+
+This domain can be replaced with a **Custom Domain** of your choice. This **Custom Domain** can be purchased with <OrgName /> or a third-party.
+
+In this document, adding a domain to your <ProductName /> [projects](/docs/platform/projects/) is explained in detail.
+
+<Note label={false}>
+  If you want to migrate an <b>existing domain</b> to Vercel, read our Knowledge
+  Base article on{' '}
+  <Link href="/knowledge/zero-downtime-migration-for-dns">
+    Zero-Downtime Migration for DNS
+  </Link>
+  .
+</Note>
+
+## Adding a Domain
+
+If you don't own a domain yet, you can [purchase it with <OrgName />](/domains). Then, once you own a domain, adding it to a project is very straightforward:
+
+### Step 1: Selecting Your Project
+
+On the [dashboard](/dashboard), pick the project to which you would like to assign your domain:
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/select-project.png`}
+  width={1102 / 2}
+  height={410 / 2}
+  shadow
+/>
+<Caption>
+  Selecting the project from the <OrgName /> Dashboard.
+</Caption>
+
+### Step 2: Navigating to Domain Settings
+
+Once you have selected the project of your choice, click on the **Settings** tab:
+
+<Image
+  src={`${process.env.ASSETS}/docs/common/select-settings.png`}
+  width={626 / 2}
+  height={340 / 2}
+  shadow
+/>
+<Caption>
+  Selecting the <b>Settings</b> tab from the Project Overview page.
+</Caption>
+
+Then, select the **Domains** menu item:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/select-domains.png`}
+  width={440 / 2}
+  height={532 / 2}
+  shadow
+/>
+<Caption>
+  Selecting the <b>Domains</b> menu item from the Project Settings page.
+</Caption>
+
+### Step 3: Entering Your Chosen Domain
+
+From the **Domains** page, enter the domain you wish to add to the project:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/enter-domain.png`}
+  width={1566 / 2}
+  height={392 / 2}
+  shadow
+/>
+<Caption>Entering a domain for the project from the Domains page.</Caption>
+
+### Step 4: Configuring the Domain
+
+Once the domain has been added, you will be presented with different methods for configuring it, depending on whether it is an [**apex domain**](/docs/platform/glossary#apex-domain) (example.com) or **subdomain** (docs.example.com).
+
+**Apex domains** can be configured with a **A** record, while **subdomains** can be configured with a **CNAME** record.
+Both domain types can also be configured using the **Nameservers** method.
+
+#### Apex Domains
+
+You can configure [apex domains](/docs/platform/glossary#apex-domain) either with a **A** record or through the **Nameservers** method.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/configure-apex-domain.png`}
+  width={1496 / 2}
+  height={658 / 2}
+  shadow
+/>
+<Caption>
+  Instructions on configuring an <strong>apex domain</strong> from the Project
+  Domains page.
+</Caption>
+
+#### Subdomains
+
+You can configure **subdomains** either with a **CNAME** record or through the **Nameservers** method.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/configure-subdomain.png`}
+  width={1496 / 2}
+  height={658 / 2}
+  shadow
+/>
+<Caption>
+  Instructions on configuring a <strong>subdomain</strong> from the Project
+  Domains page.
+</Caption>
+
+### Step 5: Domain Configured
+
+Once the domain has been configured, the card status will change to reflect this.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/configured-domain.png`}
+  width={1496 / 2}
+  height={232 / 2}
+  shadow
+/>
+<Caption>A configured domain on the Project Domains page.</Caption>
+
+## DNS Records
+
+Once a domain has been added, all of its DNS Records can be found in the Advanced Settings page.
+From there, you can view and manage the records.
+
+### Step 1: Selecting your Domain
+
+On the [dashboard](/dashboard), click on the **Domains** tab:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/select-domains-tab-2.png`}
+  width={982 / 2}
+  height={732 / 2}
+  shadow
+/>
+<Caption>
+  Selecting the <b>Domains</b> tab from the <OrgName /> Dashboard page.
+</Caption>
+
+Once on the **Domains** tab, click on a domain of your choice to view its Advanced Settings page.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/deploy-new-domain.png`}
+  width={2158 / 2}
+  height={978 / 2}
+  shadow
+/>
+<Caption>Selecting the domain to view its Advanced Settings page.</Caption>
+
+### Step 2: Add DNS Record
+
+Once on the Advanced Settings page of your domain, fill out the DNS Record form and click on the **Add** button.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/dns-record-form.png`}
+  width={2068 / 2}
+  height={646 / 2}
+  shadow
+/>
+<Caption>DNS Records form to add a new DNS Record.</Caption>
+
+Using the form mentioned above, you can then add the DNS Record of your choice. The following types are supported:
+
+- `A`
+- `AAAA`
+- `ALIAS`
+- `CAA`
+- `CNAME`
+- `MX`
+- `SRV`
+- `TXT`
+
+## Wildcard Domains
+
+You can use your **Custom Domain** as a **Wildcard Domain** by prefixing it with `*.`.
+
+<Note type="warning">
+  If using your <b>Custom Domain</b> as a <b>Wildcard</b> Domain, you{' '}
+  <b>must use the nameservers method for verification</b>.
+</Note>
+
+To add a **Wildcard Domain**, follow the steps to [add a domain](#step-1:-selecting-your-project). At [step 3](#step-3:-entering-your-chosen-domain), use the prefix `*` (e.g. `*.acme.com`).
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/wildcard-domain.png`}
+  width={1496 / 2}
+  height={232 / 2}
+  shadow
+/>
+<Caption>
+  A <b>Wildcard Domain</b> being deployed.
+</Caption>
+
+After the verification process is complete, the status of the domain will be updated within the UI to confirm that it is ready for use.
+
+## Deploying with Your Domain
+
+Once the domain has been added to your project and configured, it is **automatically applied to your latest deployment**.
+
+<Note>
+  The first deployment of a new project will be marked as production and
+  subsequently assigned with your custom domain automatically.
+</Note>
+
+When a **Custom Domain** is assigned to a project with an enabled [<ProductName /> for Git Integration](/docs/git-integrations), each push (including merges) to the [Production Branch](/docs/git-integrations#production-branch) (commonly `main`) will trigger a deployment to the defined domain.
+
+Reverts take effect immediately, assigning the **Custom Domain** to the deployment made prior to the point the revert is effective from.
+
+## Redirecting Domains
+
+You can add domain redirects from the **Domains** tab when more than one domain is present for the project. This provides a way to, for example, redirect a `www` **subdomain** to an **apex domain** but can be used in a variety of ways.
+
+To add a redirect, click the **Edit** button for the domain you want to redirect from and use the **Redirect to** dropdown to select the domain you want to redirect to:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/redirecting-domains.png`}
+  width={1496 / 2}
+  height={662 / 2}
+  shadow
+/>
+<Caption>
+  A <b>domain redirect</b> that redirects requests made to{' '}
+  <InlineCode>www.example.com</InlineCode> to{' '}
+  <InlineCode>example.com</InlineCode>.
+</Caption>
+
+## Moving Domains
+
+You can move domains to another profile or team using the **Domains** tab from the **<OrgName /> Dashboard**.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/select-domains-tab.png`}
+  width={1224 / 2}
+  height={278 / 2}
+  shadow
+/>
+<Caption>
+  Selecting the <b>Domains</b> tab from the <OrgName /> Dashboard page.
+</Caption>
+
+Once on the **Domains** tab, select the domain(s) you wish to move by using the checkbox next to each domain then click **Move**.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/domains-list.png`}
+  width={1350 / 2}
+  height={492 / 2}
+  shadow
+/>
+<Caption>
+  Selecting which domains to move from the <b>Domains</b> tab.
+</Caption>
+
+After selecting the domain(s) and clicking **Move**, you will be asked to confirm which profile or team you wish to move them to.
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/move-modal.png`}
+  width={840 / 2}
+  height={818 / 2}
+  shadow
+/>
+<Caption>Entering a new profile or team destination for a domain.</Caption>
+
+When selecting the input field, you will be provided with a list of teams you belong to. If the profile or team you wish to move the domain(s) to is not present, enter the `slug` value instead. You can find the `slug` value in **Settings** page for both profiles and teams.
+
+<Note type="warning">
+  When moving domains to another team or profile, they will be removed from{' '}
+  <b>all projects</b> they are currently part of.
+</Note>
+
+To confirm the change, select **Move**. The domains will be transferred to the new profile of team immediately.
+
+## Assigning a Domain to a Git Branch
+
+Every commit pushed to the [Production Branch](/docs/git-integrations#production-branch) of your Git repository using our [Git Integration](/docs/git-integrations) will be assigned the domains [configured in your project](#adding-a-domain).
+
+In order to automatically assign a domain to a different branch, you can enter it in the **Git Branch** field of your Domain:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/branch-domains.png`}
+  width={1496 / 2}
+  height={664 / 2}
+  shadow
+/>
+<Caption>
+  A <strong>Custom Domain</strong> that is automatically assigned to the{' '}
+  <InlineCode>staging</InlineCode> <b>Git Branch</b>.
+</Caption>
+
+## Removing a Domain
+
+To remove a domain that is assigned to a project, navigate to the **Domains** tab from the Project Overview and click the **Edit** button for the domain you want to remove:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/edit-domain.png`}
+  width={1496 / 2}
+  height={232 / 2}
+  shadow
+/>
+<Caption>
+  A configured domain on the Project Domains page with the option to edit.
+</Caption>
+
+Once the **Edit** button has been clicked, you will be presented with further options. Click the **Remove** button to remove the domain from the project:
+
+<Image
+  src={`${process.env.ASSETS}/docs/custom-domains/remove-domain.png`}
+  width={1496 / 2}
+  height={664 / 2}
+  shadow
+/>
+<Caption>
+  A configured domain on the Project Domains page with the option to remove.
+</Caption>
+
+## Provider Specific Instructions
+
+### Cloudflare
+
+To use [Cloudflare](https://www.cloudflare.com/)-managed domains, follow these steps:
+
+1. Configure your domain such that SSL is disabled for the path `/.well-known/**`.
+2. Run `curl http://<domain>/.well-known/acme-challenge` (Replace `<domain>` with your domain. Notice that it’s `http` and not `https`).
+
+If the above `curl` command returns an error (e.g. `{"error":{...}}`), then you’re good to go - it means that <OrgName /> can generate certificates successfully. Otherwise, make sure that SSL is disabled for `/.well-known/**` and try again.
+
+## Related
+
+For more information on what to do next, we recommend the following article:
+
+<Card
+  title="Transferring Your Domain"
+  href="/guides/transferring-domains-to-zeit-now"
+>
+  Learn how to transfer a domain to <ProductName />.
+</Card>
+
+<Card
+  title="Serverless Functions"
+  href="/docs/serverless-functions/introduction"
+>
+  Extend the capabilities of your project by adding Serverless Functions to it.
+</Card>
+
+export default ({ children }) => <Doc meta={meta}>{children}</Doc>
+
+export const config = {
+  amp: 'hybrid',
+}

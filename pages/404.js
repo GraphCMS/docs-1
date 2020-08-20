@@ -5,6 +5,7 @@ import Text, { H1, H4 } from '~/components/text'
 import { LinkList } from '~/components/list'
 import Link from '~/components/text/link'
 import { ORG_NAME } from '~/lib/constants'
+import Footer from '~/components/footer'
 
 function ErrorPage() {
   return (
@@ -111,6 +112,7 @@ function ErrorPage() {
           </LinkList>
         </div>
       </Content>
+      <Footer />
       <style jsx>{`
         .description {
           text-align: center;
@@ -118,7 +120,7 @@ function ErrorPage() {
           max-width: 100%;
           padding: 0 16px;
           padding-top: 64px;
-          margin: 0 auto;
+          margin: 3rem auto 4rem;
           display: flex;
           flex-direction: column;
           align-items: center;

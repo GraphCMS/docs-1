@@ -1,0 +1,27 @@
+import { Code, InlineCode } from '~/components/text/code'
+import Link from '~/components/text/link'
+import Caption from '~/components/text/caption'
+import { API_ENDPOINT } from '~/lib/constants'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/api-basics/versioning.mdx',
+  lastEdited: '2019-10-17T14:44:04.000Z',
+}
+
+## Versioning
+
+All endpoints and examples are designated with a specific version. Versions vary per endpoint and are not global.
+
+The response shape of a certain endpoint is not guaranteed to be fixed over time. In particular, we might add new keys to responses without bumping a version endpoint, which will be noted in the changelog.
+
+To ensure the security and correctness of your application, make sure to only read the keys from the response that your application needs. Don't proxy entire responses to third-parties without validation.
+
+Old versions of each endpoint are supported for as long as possible. When we intend to deprecate, we will notify users in the changelog section.
+
+Endpoint versions follow the base URL and come before the endpoint. For example:
+
+<Code>{`${API_ENDPOINT}/v6/now/deployments`}</Code>
+<Caption>
+  Using version <InlineCode>6</InlineCode> of the{' '}
+  <Link href="#endpoints/deployments"> deployments endpoint</Link>.
+</Caption>

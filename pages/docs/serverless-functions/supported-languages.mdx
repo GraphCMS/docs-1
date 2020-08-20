@@ -1,0 +1,219 @@
+import Doc from '~/components/layout/docs'
+import Snippet from '~/components/snippet'
+import { InlineCode } from '~/components/text/code'
+import { Image } from '~/components/media'
+import Caption from '~/components/text/caption'
+import Card from '~/components/card'
+import Note from '~/components/text/note'
+import ProductName from '~/components/name/product-name'
+import { PRODUCT_NAME } from '~/lib/constants'
+
+export const meta = {
+  title: 'Supported Languages for Serverless Functions',
+  description: `Learn how to deploy Serverless Functions with ${PRODUCT_NAME}.`,
+  editUrl: 'pages/docs/serverless-functions/supported-languages.mdx',
+  lastEdited: '2020-08-04T21:21:17.000Z',
+}
+
+Within the `/api` directory of your projects, <ProductName /> will automatically recognize the languages listed on this page, through their file extensions, and serve them as Serverless Function.
+
+## Supported Languages:
+
+- [Node.js](#node.js)
+- [Go](#go)
+- [Python](#python)
+- [Ruby](#ruby)
+
+## Node.js
+
+**File Extensions**: `.js`, `.ts`<br />
+**Default Version**: 12.x (or [defined](/docs/runtimes#official-runtimes/node-js/node-js-version))
+
+Node.js files through a JavaScript file or a [TypeScript](#using-typescript) file within the `api` directory, containing a default exported function, will be served as Serverless Functions.
+
+For example, the following would live in `api/hello.js`:
+
+```js
+module.exports = (req, res) => {
+  const { name = 'World' } = req.query
+  res.status(200).send(`Hello ${name}!`)
+}
+```
+
+<Caption>
+  An example Node.js function that receives a <InlineCode>name</InlineCode>{' '}
+  query and returns a greeting string.
+</Caption>
+
+Example deployment: <https://node-api.now-examples.now.sh/api/hello?name=reader>
+
+<Image
+  src={`https://assets.vercel.com/image/upload/v1545360454/front/docs/official-builders/serverless-node.png`}
+  width={1376 / 2}
+  height={882 / 2}
+/>
+<Caption>
+  The Serverless Function with the <InlineCode>name</InlineCode> query parameter
+  using Node.js to change the name.
+</Caption>
+
+### Using TypeScript
+
+Deploying a Node.js function with the `.ts` extension will automatically be recognized as a [TypeScript](https://www.typescriptlang.org/) file and compiled to a Serverless Function.
+
+As an example; a file called `hello.ts` in the `api` directory, and importing types for the <ProductName /> platform Request and Response objects from the `@vercel/node` module:
+
+```ts
+import { NowRequest, NowResponse } from '@vercel/node'
+
+export default (request: NowRequest, response: NowResponse) => {
+  const { name = 'World' } = request.query
+  response.status(200).send(`Hello ${name}!`)
+}
+```
+
+<Caption>
+  An example TypeScript Node.js function that receives a{' '}
+  <InlineCode>name</InlineCode> query and returns a greeting string.
+</Caption>
+
+Example deployment: <https://ts-api.now-examples.now.sh/api/hello?name=reader>
+
+You can install the `@vercel/node` module for type definitions through npm:
+
+<Snippet width="100%" dark text="npm i -D @vercel/node" />
+<Caption>
+  Installing the <InlineCode>@vercel/node</InlineCode> module for Type
+  definitions of <InlineCode>NowRequest</InlineCode> and{' '}
+  <InlineCode>NowResponse</InlineCode>
+</Caption>
+
+You can also define a `tsconfig.json` to configure the <ProductName /> TypeScript compiler.
+
+### Advanced Node.js Usage
+
+For more advanced usage of Node.js on the <ProductName /> platform, including [information about the request and response objects](/docs/runtimes#official-runtimes/node-js/node-js-request-and-response-objects), [extended helpers](/docs/runtimes#official-runtimes/node-js/node-js-request-and-response-objects) for Node.js on <ProductName />, [private npm packages](/docs/runtimes#advanced-usage/advanced-node-js-usage/private-npm-modules-for-node-js), or [advanced configuration](/docs/runtimes#advanced-usage/advanced-node-js-usage), see [the Node.js runtime documentation](/docs/runtimes#official-runtimes/node-js).
+
+---
+
+## Go
+
+**File Extension**: `.go`<br />
+**Default Version**: Go 1.x
+
+Go files in the `api` directory that export a function matching the `net/http` Go API will be served as Serverless Functions.
+
+For example, the following would live in `api/date.go`:
+
+```go
+package handler
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
+
+func Handler(w http.ResponseWriter, r *http.Request) {
+	currentTime := time.Now().Format(time.RFC850)
+	fmt.Fprintf(w, currentTime)
+}
+```
+
+<Caption>An example Go function that returns the current date.</Caption>
+
+<Note>
+  Your Go function must begin with a capital letter in order to be exported.
+</Note>
+
+When deployed, the example function above will be served as a Serverless Function, returning the latest date. See it live with the following link: <https://go-api.now-examples.now.sh/api/date>
+
+### Advanced Go Usage
+
+For more advanced usage of Go on the <ProductName /> platform, including [dependencies](/docs/runtimes#official-runtimes/go/go-dependencies), [build configuration](/docs/runtimes#official-runtimes/go/go-build-configuration), [private dependencies](/docs/runtimes#advanced-usage/advanced-go-usage), or [advanced configuration](/docs/runtimes#advanced-usage/advanced-go-usage), see [the Go runtime documentation](/docs/runtimes#official-runtimes/go).
+
+---
+
+## Python
+
+**File Extension**: `.py`<br />
+**Default Version**: Python 3.6
+
+Python files within the `api` directory, containing an handler variable that inherits from the `BaseHTTPRequestHandler` class or an `app` variable that exposes a WSGI or ASGI application, will be served as Serverless Functions.
+
+For example, the following would live in `api/date.py`:
+
+```py
+from http.server import BaseHTTPRequestHandler
+from datetime import datetime
+
+class handler(BaseHTTPRequestHandler):
+
+  def do_GET(self):
+    self.send_response(200)
+    self.send_header('Content-type', 'text/plain')
+    self.end_headers()
+    self.wfile.write(str(datetime.now().strftime('%Y-%m-%d %H:%M:%S')).encode())
+    return
+```
+
+<Caption>An example Python function that returns the current date.</Caption>
+
+When deployed, the example function above will be served as a Serverless Function, returning the current date and time. See it live with the following link: <https://python-api.now-examples.now.sh/api/date>
+
+### Advanced Python Usage
+
+For more advanced usage of Python on the <ProductName /> platform, including [dependencies](/docs/runtimes#official-runtimes/python/python-dependencies), [WSGI applications](/docs/runtimes#advanced-usage/advanced-python-usage/web-server-gateway-interface), [ASGI applications](/docs/runtimes#advanced-usage/advanced-python-usage/asynchronous-server-gateway-interface), or [advanced configuration](/docs/runtimes#advanced-usage/advanced-python-usage), see [the Python runtime documentation](/docs/runtimes#official-runtimes/python).
+
+---
+
+## Ruby
+
+**File Extension**: `.rb`<br />
+**Default Version**: Ruby 2.5.x
+
+Ruby files that define a singular HTTP handler, within the `api` directory, will be served as Serverless Functions.
+
+For example, the following would live in `api/date.rb`:
+
+```rb
+Handler = Proc.new do |req, res|
+  res.status = 200
+  res['Content-Type'] = 'text/text; charset=utf-8'
+  res.body = "Current Time: #{Time.new}"
+end
+```
+
+<Caption>An example Ruby function that returns the current date.</Caption>
+
+When deployed, the example function above will be served as a Serverless Function, returning the current date and time. See it live with the following link: <https://ruby-date.now.sh/api/date>
+
+### Advanced Ruby Usage
+
+For more advanced usage of Ruby on the <ProductName /> platform, including [dependencies](/docs/runtimes#official-runtimes/ruby/ruby-dependencies), or [Rack interfaces](/docs/runtimes#advanced-usage/advanced-ruby-usage/rack-interface), see [the Ruby runtime documentation](/docs/runtimes#official-runtimes/ruby).
+
+---
+
+## Related
+
+For more information on what to do next, we recommend the following articles:
+
+<Card
+  title="Serverless Functions"
+  href="/docs/v2/serverless-functions/introduction"
+>
+  For more information on how to get started with Serverless Functions on{' '}
+  <ProductName /> and how you can develop them further, read the Serverless
+  Functions introduction.
+</Card>
+
+<Card title={`Introduction to ${PRODUCT_NAME}`} href="/docs/v2/introduction">
+  You've got your Serverless Function ready to go, now learn how to deploy it
+  with a single-command and a first-class frontend with no extra configuration.
+</Card>
+
+export default ({ children }) => <Doc meta={meta}>{children}</Doc>
+
+export const config = {
+  amp: 'hybrid',
+}

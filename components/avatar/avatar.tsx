@@ -8,7 +8,7 @@ export const GenericAvatar = React.memo(
     src,
     size,
     placeholder = false,
-    className
+    className,
   }: {
     title?: string
     src?: string
@@ -28,25 +28,29 @@ export const GenericAvatar = React.memo(
         key={src}
         style={{
           width: size,
-          height: size
+          height: size,
         }}
       >
-        {placeholder ? null : (
-          useAmp() ? (
-            React.createElement('amp-img', { src, width: size, height: size, title, alt: title })
-          ) : (
-            <img
-              ref={imgRef}
-              key={src}
-              alt={title}
-              title={title}
-              src={src}
-              width={size}
-              height={size}
-              onLoad={() => setReady(true)}
-              className={ready ? 'ready' : ''}
-            />
-          )
+        {placeholder ? null : useAmp() ? (
+          React.createElement('amp-img', {
+            src,
+            width: size,
+            height: size,
+            title,
+            alt: title,
+          })
+        ) : (
+          <img
+            ref={imgRef}
+            key={src}
+            alt={title}
+            title={title}
+            src={src}
+            width={size}
+            height={size}
+            onLoad={() => setReady(true)}
+            className={ready ? 'ready' : ''}
+          />
         )}
         <style jsx>
           {`
@@ -111,7 +115,7 @@ export const Avatar: React.FC<Props> = React.memo(
     uid,
     hash,
     url,
-    className
+    className,
   }) => {
     const avatarSize = parseInt((height || boxSize || size) as string)
 
@@ -151,7 +155,8 @@ export const Avatar: React.FC<Props> = React.memo(
 
     const sizePrefix = hasSHA ? '?' : '&'
     const _url =
-      url || `https://zeit.co/api/www/avatar/${query + sizePrefix}s=${size * 2}`
+      url ||
+      `https://vercel.com/api/www/avatar/${query + sizePrefix}s=${size * 2}`
 
     return (
       <GenericAvatar

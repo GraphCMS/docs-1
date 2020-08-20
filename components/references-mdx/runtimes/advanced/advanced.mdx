@@ -8,7 +8,7 @@ import ProductName from '~/components/name/product-name'
 
 export const meta = {
   editUrl: 'pages/docs/runtimes/runtimes-mdx/advanced/advanced.mdx',
-  lastEdited: '2019-10-22T21:47:59.000Z'
+  lastEdited: '2019-10-22T21:47:59.000Z',
 }
 
 # Advanced Usage
@@ -90,26 +90,26 @@ Alternatively, define `NPM_RC` as a [build environment variable](/docs/configura
 
 ### Custom Build Step for Node.js
 
-You can run build tasks by creating a `now-build` script within a `package.json` file at the entry point's level or higher. For example:
+You can run build tasks by creating a `vercel-build` script within a `package.json` file at the entry point's level or higher. For example:
 
 ```json
 {
   "scripts": {
-    "now-build": "node ./build.js"
+    "vercel-build": "node ./build.js"
   }
 }
 ```
 
 <Caption>
   An example <InlineCode>package.json</InlineCode> file with a{' '}
-  <InlineCode>now-build</InlineCode> script to execute in the build step.
+  <InlineCode>vercel-build</InlineCode> script to execute in the build step.
 </Caption>
 
 Along with build script named `build.js`:
 
 ```js
 const fs = require('fs')
-fs.writeFile('built-time.js', `module.exports = '${new Date()}'`, err => {
+fs.writeFile('built-time.js', `module.exports = '${new Date()}'`, (err) => {
   if (err) throw err
   console.log('Build time file created successfully!')
 })
@@ -150,11 +150,11 @@ A Node.js Runtime entrypoint can contain one of the following to retain legacy s
 The Node.js Runtime provides a way to opt into the [AWS Lambda API](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html). This is useful if you have existing Serverless Functions you wish to deploy to <ProductName /> but do not want to change the API.
 
 ```js
-exports.handler = async function(event, context, callback) {
+exports.handler = async function (event, context, callback) {
   return {
     statusCode: 200,
     headers: {},
-    body: 'Hello world'
+    body: 'Hello world',
   }
 }
 ```
@@ -316,11 +316,11 @@ const { join } = require('path');
 const file = readFileSync(join(__dirname, 'config', 'ci.yml'), 'utf8');
 `}</Code>
 <Caption>
-    This <InlineCode>/index.js</InlineCode> file reads the contents of{' '}
-    <InlineCode>/config/ci.yml</InlineCode>.<br />
-    The use of <InlineCode>__dirname</InlineCode> is necessary to read a file relative
-    to the current file.
-  </Caption>
+  This <InlineCode>/index.js</InlineCode> file reads the contents of{' '}
+  <InlineCode>/config/ci.yml</InlineCode>.<br />
+  The use of <InlineCode>__dirname</InlineCode> is necessary to read a file relative
+  to the current file.
+</Caption>
 
 In some cases, you may wish to include templates or views that are not able to be statically analyzed. Runtimes provide a configuration for `includeFiles` that accepts a glob of files that will always be included in the Serverless Functions output.
 
@@ -333,7 +333,7 @@ In some cases, you may wish to include templates or views that are not able to b
 }`}</Code>
 <Caption>
   Using the{' '}
-  <Link href="/docs/v2/deployments/official-runtimes/node-js-now-node/">
+  <Link href="/docs/deployments/official-runtimes/node-js-now-node/">
     default Node.js language
   </Link>{' '}
   and configuring the <InlineCode>includeFiles</InlineCode> within a{' '}

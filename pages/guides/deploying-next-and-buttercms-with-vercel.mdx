@@ -16,11 +16,11 @@ export const meta = {
   published: '2019-06-21T16:51:04.000Z',
   authors: ['mcsdev'],
   url: '/guides/deploying-next-and-buttercms-with-vercel',
-  image: `https://vercel.com/docs/static/guides/deploying-next-and-buttercms-with-vercel/deploying-next-and-buttercms-with-vercel.png`,
+  image: `https://og-image.now.sh/**ButterCMS-backed%20Next.js%20apps**%3Cbr%3Ewith%20${PRODUCT_NAME}.png?theme=light&md=1&fontSize=75px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fvercel-triangle-black.svg&images=https%3A%2F%2Fupload.wikimedia.org%2Fwikipedia%2Fcommons%2F8%2F8e%2FNextjs-logo.svg&images=https%3A%2F%2Fres.cloudinary.com%2Fpracticaldev%2Fimage%2Ffetch%2Fs--I6CRySrV--%2Fc_limit%252Cf_auto%252Cfl_progressive%252Cq_auto%252Cw_880%2Fhttps%3A%2F%2Fdev-to-uploads.s3.amazonaws.com%2Fi%2Fdxq0h2d96tpaof9lb9h2.png`,
   editUrl: 'pages/guides/deploying-next-and-buttercms-with-vercel.mdx',
   name: 'Next.js + ButterCMS',
   type: 'app',
-  lastEdited: '2020-06-02T23:37:58.000Z'
+  lastEdited: '2020-07-17T05:49:23.000Z',
 }
 
 In this guide, you will discover how to create a [Next.js](https://nextjs.org/) app that displays links to posts from the [<OrgName /> blog](/blog) by utilizing the [ButterCMS](https://buttercms.com/) content management system, before deploying **with a single command** to [<ProductName />](/docs/v2).
@@ -30,9 +30,7 @@ In this guide, you will discover how to create a [Next.js](https://nextjs.org/) 
 By following this guide, you will create a clone of the [example app](https://nextjs-buttercms.now-examples.now.sh/), a starting point to get you up and running with your own Next.js + ButterCMS app in minutes.
 
 <Image
-  src={`${
-    process.env.ASSETS
-  }/guides/deploying-next-and-buttercms-with-vercel/deploying-next-and-buttercms-with-vercel.png`}
+  src={`${process.env.ASSETS}/guides/deploying-next-and-buttercms-with-vercel/deploying-next-and-buttercms-with-vercel.png`}
   width={2048 / 2.75}
   height={1170 / 2.75}
   oversize
@@ -43,15 +41,16 @@ By following this guide, you will create a clone of the [example app](https://ne
 From your [ButterCMS Collections dashboard](https://buttercms.com/content/collections/), create a new **Collection** called **Posts** by clicking the **+ New Collection** button.
 
 <Image
-  src={`${
-    process.env.ASSETS
-  }/guides/deploying-next-and-buttercms-with-vercel/creating-collection.png`}
-  width={1555/2}
-  height={656/2}
+  src={`${process.env.ASSETS}/guides/deploying-next-and-buttercms-with-vercel/creating-collection.png`}
+  width={1555 / 2}
+  height={656 / 2}
   oversize
   shadow
 />
-<Caption>Creating a Collection for your Next.js + ButterCMS project using the ButterCMS Collections dashboard.</Caption>
+<Caption>
+  Creating a Collection for your Next.js + ButterCMS project using the ButterCMS
+  Collections dashboard.
+</Caption>
 
 Add the following fields to your **Collection**, all of type **Short Text**, by clicking the **Add New Property** button:
 
@@ -64,11 +63,9 @@ Add the following fields to your **Collection**, all of type **Short Text**, by 
 Your **Posts Collection** should look like this:
 
 <Image
-  src={`${
-    process.env.ASSETS
-  }/guides/deploying-next-and-buttercms-with-vercel/completed-collection.png`}
-  width={1503/2}
-  height={592/2}
+  src={`${process.env.ASSETS}/guides/deploying-next-and-buttercms-with-vercel/completed-collection.png`}
+  width={1503 / 2}
+  height={592 / 2}
   oversize
   shadow
 />
@@ -84,13 +81,19 @@ Next, select **Settings** from the account dropdown menu at the top left of the 
 
 Firstly, create a project directory and `cd` into it like so:
 
-<Snippet dark text="mkdir my-nextjs-buttercms-project && cd my-nextjs-buttercms-project" />
+<Snippet
+  width="100%"
+  dark
+  text="mkdir my-nextjs-buttercms-project && cd my-nextjs-buttercms-project"
+/>
 <Caption>Creating and entering into the project directory.</Caption>
 
 Next, initialize your project, creating a `package.json` file in the process:
 
-<Snippet dark text="npm init -y" />
-<Caption>Initializing your project with a <InlineCode>package.json</InlineCode> file.</Caption>
+<Snippet width="100%" dark text="npm init -y" />
+<Caption>
+  Initializing your project with a <InlineCode>package.json</InlineCode> file.
+</Caption>
 
 <Note>
   Using the <InlineCode>-y</InlineCode> flag will initialize the created{' '}
@@ -100,8 +103,11 @@ Next, initialize your project, creating a `package.json` file in the process:
 
 Next, add the project dependencies:
 
-<Snippet dark text="npm i next react react-dom" />
-<Caption>Adding <InlineCode>next</InlineCode>, <InlineCode>react</InlineCode> and <InlineCode>react-dom</InlineCode> as dependencies to your project.</Caption>
+<Snippet width="100%" dark text="npm i next react react-dom" />
+<Caption>
+  Adding <InlineCode>next</InlineCode>, <InlineCode>react</InlineCode> and{' '}
+  <InlineCode>react-dom</InlineCode> as dependencies to your project.
+</Caption>
 
 With the project initialized, create a `/pages` directory with a `index.js` file inside that uses the following code:
 
@@ -115,9 +121,7 @@ function HomePage() {
   useEffect(() => {
     async function getPosts() {
       const res = await fetch(
-        `https://api.buttercms.com/v2/content/?keys=posts&auth_token=${
-          process.env.API_TOKEN
-        }`
+        `https://api.buttercms.com/v2/content/?keys=posts&auth_token=${process.env.API_TOKEN}`
       )
       const { data } = await res.json()
       const allPosts = data.posts
@@ -136,7 +140,7 @@ function HomePage() {
         />
       </Head>
       {posts.length > 0
-        ? posts.map(p => (
+        ? posts.map((p) => (
             <Post
               alt={p.alt}
               date={p.date}
@@ -245,8 +249,8 @@ With your `vercel.json` file created, you should add a `next.config.js` file at 
 ```js
 module.exports = {
   env: {
-    API_TOKEN: process.env.BUTTER_API_TOKEN
-  }
+    API_TOKEN: process.env.BUTTER_API_TOKEN,
+  },
 }
 ```
 
@@ -288,14 +292,19 @@ BUTTER_API_TOKEN=your-api-token
 
 Lastly, to make your API key available for [cloud deployment](/docs/v2/deployments/basics/), create a [Secret](/docs/cli#commands/secrets) with the command below:
 
-<Snippet dark text="vercel secrets add BUTTER_API_TOKEN your-space-id" />
+<Snippet
+  width="100%"
+  dark
+  text="vercel secrets add BUTTER_API_TOKEN your-space-id"
+/>
 <Caption>
-  Adding the <InlineCode>BUTTER_API_TOKEN</InlineCode> secret to your project using <Link href="/docs/cli#commands/secrets">Secrets</Link>.
+  Adding the <InlineCode>BUTTER_API_TOKEN</InlineCode> secret to your project
+  using <Link href="/docs/cli#commands/secrets">Secrets</Link>.
 </Caption>
 
 With those steps out the way you are now able to run your app. You can develop your app locally using the following command:
 
-<Snippet dark text="next dev" />
+<Snippet width="100%" dark text="next dev" />
 <Caption>
   Using the <InlineCode>next dev</InlineCode> command to run the app locally.
 </Caption>
@@ -307,5 +316,5 @@ With those steps out the way you are now able to run your app. You can develop y
 export default ({ children }) => <Guide meta={meta}>{children}</Guide>
 
 export const config = {
-  amp: 'hybrid'
+  amp: 'hybrid',
 }

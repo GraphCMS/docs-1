@@ -1,3 +1,3 @@
-import Introduction from './v2/introduction.mdx'
+import Introduction from './introduction.mdx'
 
 export default Introduction

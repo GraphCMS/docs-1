@@ -7,7 +7,7 @@ import _scrollIntoViewIfNeeded from 'scroll-into-view-if-needed'
 import ArrowRight from '~/components/icons/chevron-right'
 import * as metrics from '~/lib/metrics'
 
-function scrollIntoViewIfNeeded(elem, centerIfNeeded, options, config) {
+function manualScrollIntoViewIfNeeded(elem, centerIfNeeded, options, config) {
   const finalElement = findClosestScrollableElement(elem)
   return _scrollIntoViewIfNeeded(
     elem,
@@ -36,7 +36,7 @@ function Category({ info, level = 1, onClick, ...props }) {
   const levelClass = `level-${level}`
 
   const categorySelected =
-    props.url.pathname === '/docs' || props.url.pathname === '/docs/v2'
+    props.url.pathname === '/docs'
       ? info.name === 'Getting Started'
         ? true
         : false
@@ -49,7 +49,7 @@ function Category({ info, level = 1, onClick, ...props }) {
     metrics.event({
       action: 'sidebar_category_toggled',
       category: 'engagement',
-      label: info.name
+      label: info.name,
     })
   }
 
@@ -58,7 +58,7 @@ function Category({ info, level = 1, onClick, ...props }) {
       className={cn('category', levelClass, {
         open: categorySelected,
         selected: categorySelected,
-        separated: info.sidebarSeparator
+        separated: info.sidebarSeparator,
       })}
       key={info.name || ''}
     >
@@ -81,7 +81,7 @@ function Category({ info, level = 1, onClick, ...props }) {
         )}
       </span>
       <div className="posts">
-        {info.posts.map(postInfo => (
+        {info.posts.map((postInfo) => (
           <Post
             info={postInfo}
             level={level + 1}
@@ -236,7 +236,15 @@ function Post({ info, level = 1, onClick, ...props }) {
 }
 
 const NavLink = React.memo(
-  ({ info, url, hash, onClick, scrollSelectedIntoView, categorySelected }) => {
+  ({
+    info,
+    url,
+    hash,
+    onClick,
+    scrollSelectedIntoView,
+    categorySelected,
+    level,
+  }) => {
     const node = useRef(null)
 
     const getCurrentHref = () => {
@@ -269,7 +277,7 @@ const NavLink = React.memo(
       return false
     }
 
-    const [selected, setSelected] = useState(isSelected())
+    const [selected] = useState(isSelected())
 
     const onlyHashChange = () => {
       const { pathname } = parse(info.href)
@@ -281,7 +289,7 @@ const NavLink = React.memo(
         if (node.scrollIntoViewIfNeeded) {
           node.scrollIntoViewIfNeeded()
         } else {
-          scrollIntoViewIfNeeded(node)
+          manualScrollIntoViewIfNeeded(node)
         }
       }
     }
@@ -292,16 +300,21 @@ const NavLink = React.memo(
 
     return (
       <span ref={node} className={cn('nav-link', { selected })}>
-        {// NOTE: use just anchor element for triggering `hashchange` event
-        onlyHashChange() ? (
-          <a className={selected ? 'selected' : ''} href={info.as || info.href}>
-            {info.name}
-          </a>
-        ) : (
-          <NextLink href={info.href} as={info.as || info.href}>
-            <a onClick={onClick}>{info.name}</a>
-          </NextLink>
-        )}
+        {
+          // NOTE: use just anchor element for triggering `hashchange` event
+          onlyHashChange() ? (
+            <a
+              className={selected ? 'selected' : ''}
+              href={info.as || info.href}
+            >
+              {info.name}
+            </a>
+          ) : (
+            <NextLink href={info.href} as={info.as || info.href}>
+              <a onClick={onClick}>{info.name}</a>
+            </NextLink>
+          )
+        }
         <style jsx>{`
           div.selected {
             box-sizing: border-box;
@@ -362,7 +375,7 @@ export default function DocsNavbarDesktop({
 }) {
   return (
     <>
-      {data.map(categoryInfo =>
+      {data.map((categoryInfo) =>
         categoryInfo.posts ? (
           <Category
             info={categoryInfo}

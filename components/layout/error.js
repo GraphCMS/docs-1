@@ -1,7 +1,7 @@
 import React from 'react'
 import ErrorPage from 'next/error'
 
-export default Component => {
+const Error = (Component) => {
   return class WithError extends React.Component {
     static async getInitialProps(ctx) {
       const props =
@@ -10,6 +10,7 @@ export default Component => {
           : null) || {}
 
       if (props.statusCode && ctx.res) {
+        // eslint-disable-next-line require-atomic-updates
         ctx.res.statusCode = props.statusCode
       }
 
@@ -25,3 +26,5 @@ export default Component => {
     }
   }
 }
+
+export default Error

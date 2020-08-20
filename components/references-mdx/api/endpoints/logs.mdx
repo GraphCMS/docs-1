@@ -1,0 +1,242 @@
+import { Code } from '~/components/text/code'
+import { HelpLink } from '~/components/text/link'
+import Endpoint from '~/components/api/endpoint'
+import Request from '~/components/api/request'
+import { API_ENDPOINT } from '~/lib/constants'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/endpoints/logs.mdx',
+  lastEdited: '2019-10-17T14:44:04.000Z',
+}
+
+## Logs
+
+### Get Build Logs
+
+<Endpoint method="GET" url="/v2/now/deployments/:id/events" />
+
+Get the build logs of a deployment by deployment ID and build ID.
+
+#### Request Parameters
+
+| Key           | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                                                                                                          |
+| ------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **name**      | <HelpLink href="#api-basics/types">String</HelpLink>       | Deployment build ID.                                                                                                                                                                                                 |
+| **limit**     | <HelpLink href="#api-basics/types">Number</HelpLink>       | Maximum number of events to return. Provide `-1` to return all available logs.                                                                                                                                       |
+| **since**     | <HelpLink href="#api-basics/types">Number</HelpLink>       | Timestamp for when build logs should be pulled from.                                                                                                                                                                 |
+| **until**     | <HelpLink href="#api-basics/types">Number</HelpLink>       | Timestamp for when the build logs should be pulled up until.                                                                                                                                                         |
+| **direction** | <HelpLink href="#api-basics/types">Enum</HelpLink>         | Direction in which logs would be returned. Either `backward` or `forward`.                                                                                                                                           |
+| **follow**    | <HelpLink href="#api-basics/types">Number</HelpLink>       | When `follow` is set to `1`, the API will return an HTTP stream similar to [Serverless Function Logs](#endpoints/logs/stream-serverless-function-logs), which allows you to see realtime feedback on build progress. |
+
+#### Response Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                 |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **type**    | <HelpLink href="#api-basics/types">Enum</HelpLink>         | The type of log. The type could be `request`, `response`, `command` or `stdout`.                                            |
+| **created** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                                                                          |
+| **payload** | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information about the deployment including `deploymentId`, `info`, `text`, `id`, `date`, and `serial`. |
+
+##### Log Payload Key
+
+These are the keys of the `payload` key of the logs.
+
+| Key              | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                  |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **deploymentId** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the deployment.                                     |
+| **info**         | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing the `type`, `name`, and `entrypoint` of the deployment. |
+| **text**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The log content as a string.                                                 |
+| **id**           | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the log.                                            |
+| **date**         | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                           |
+
+##### Example Request
+
+<Request
+  url={`${API_ENDPOINT}/v2/now/deployments/Cm6WigEH9EBI4Uzs2WA6qOGe/events`}
+  auth
+/>
+
+##### Example Response
+
+<Code lang="json">{`[
+  {
+    "type": "stdout",
+    "created": 1548675195849,
+    "payload": {
+        "deploymentId": "dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo",
+        "info": {
+            "type": "build",
+            "name": "bld_j178cr7cm",
+            "entrypoint": "package.json"
+        },
+        "text": "sandbox worker for deployment dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo build bld_j178cr7cm",
+        "id": "34536610937913059182614073591023254523011083812228628481",
+        "date": 1548675195849,
+        "serial": "34536610937913059182614073591023254523011083812228628481"
+    }
+  },
+  {
+    "type": "stdout",
+    "created": 1548675195854,
+    "payload": {
+        "deploymentId": "dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo",
+        "info": {
+            "type": "build",
+            "name": "bld_j178cr7cm",
+            "entrypoint": "package.json"
+        },
+        "text": "patching https://api-bru1.zeit.co/v2/now/deployments/dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo/builds/bld_j178cr7cm",
+        "id": "34536610938024562908606726706730933114374325619758530562",
+        "date": 1548675195854,
+        "serial": "34536610938024562908606726706730933114374325619758530562"
+    }
+  },
+  {
+    "type": "stdout",
+    "created": 1548675196557,
+    "payload": {
+        "deploymentId": "dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo",
+        "info": {
+            "type": "build",
+            "name": "bld_j178cr7cm",
+            "entrypoint": "package.json"
+        },
+        "text": "cleaning up...\n",
+        "id": "34536610953701986783173754775230543060046123758462763011",
+        "date": 1548675196557,
+        "serial": "34536610953701986783173754775230543060046123758462763011"
+    }
+  },
+  {
+    "type": "stdout",
+    "created": 1548675196561,
+    "payload": {
+        "deploymentId": "dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo",
+        "info": {
+            "type": "build",
+            "name": "bld_j178cr7cm",
+            "entrypoint": "package.json"
+        },
+        "text": "running yarn for @vercel/build-utils...\n",
+        "id": "34536610953791189763967877267796685933136717204486684676",
+        "date": 1548675196561,
+        "serial": "34536610953791189763967877267796685933136717204486684676"
+    }
+  },
+  {
+    "type": "stdout",
+    "created": 1548675196984,
+    "payload": {
+        "deploymentId": "dpl_CyMsjjbZjkvMBom8ugeAWdKdcfQo",
+        "info": {
+            "type": "build",
+            "name": "bld_j178cr7cm",
+            "entrypoint": "package.json"
+        },
+        "text": "yarn add v1.12.3\n",
+        "id": "34536610963224404982946330856666294762466974121516400645",
+        "date": 1548675196984,
+        "serial": "34536610963224404982946330856666294762466974121516400645"
+    }
+  },
+]`}</Code>
+
+### Stream Serverless Function Logs
+
+<Endpoint method="GET" url="/v2/now/deployments/:id/events?follow=1" />
+
+Open an HTTP stream of realtime logs for a Serverless Function by it's name.
+
+#### Request Parameters
+
+| Key      | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                   |
+| -------- | ---------------------------------------------------------- | --------------------------------------------- |
+| **name** | <HelpLink href="#api-basics/types">String</HelpLink>       | Serverless Function's `functionName` property |
+
+#### Response Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                 |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **type**    | <HelpLink href="#api-basics/types">Enum</HelpLink>         | The type of log. The type could be `request`, `response`, `command` or `stdout`.                                            |
+| **created** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                                                                          |
+| **payload** | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information about the deployment including `deploymentId`, `info`, `text`, `id`, `date`, and `serial`. |
+
+##### Log Payload Key
+
+These are the keys of the `payload` key of the logs.
+
+| Key              | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                  |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **deploymentId** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the deployment.                                     |
+| **info**         | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing the `type`, `name`, and `entrypoint` of the deployment. |
+| **text**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The log content as a string.                                                 |
+| **id**           | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the log.                                            |
+| **date**         | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                           |
+
+#### Types
+
+These are the available log types with an explanation of what they mean.
+
+| Type         | Description                                           |
+| ------------ | ----------------------------------------------------- |
+| **request**  | The log is an HTTP request.                           |
+| **response** | The log is an HTTP response.                          |
+| **command**  | The log is a terminal command, e.g. `npm start`.      |
+| **stdout**   | The log is anything the application wrote to console. |
+
+##### Example Request
+
+<Request
+  url={`${API_ENDPOINT}/v2/now/deployments/Cm6WigEH9EBI4Uzs2WA6qOGe/events?follow=1&name=team_nLlpyC6REAzxudGFKbrMDlud-5916ac0d61abdb050d45f579aaa77c70a7`}
+  auth
+/>
+
+### Fetch Failed Requests for Serverless Function
+
+<Endpoint method="GET" url="/v2/now/deployments/:id/events" />
+
+Get the failed request logs of a Serverless Function by it's name.
+
+#### Request Parameters
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                        |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------------------------------ |
+| **statusCode** | <HelpLink href="#api-basics/types">String</HelpLink>       | A string with an exact HTTP error code or it's mask: `500`, `5xx`. |
+| **name**       | <HelpLink href="#api-basics/types">String</HelpLink>       | Serverless Function's `functionName` property.                     |
+
+#### Response Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                                                                 |
+| ----------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| **type**    | <HelpLink href="#api-basics/types">Enum</HelpLink>         | The type of log. The type could be `request`, `response`, `command` or `stdout`.                                            |
+| **created** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                                                                          |
+| **payload** | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing information about the deployment including `deploymentId`, `info`, `text`, `id`, `date`, and `serial`. |
+
+##### Log Payload Key
+
+These are the keys of the `payload` key of the logs.
+
+| Key              | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                                  |
+| ---------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| **deploymentId** | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the deployment.                                     |
+| **info**         | <HelpLink href="#api-basics/types">Map</HelpLink>          | An object containing the `type`, `name`, and `entrypoint` of the deployment. |
+| **text**         | <HelpLink href="#api-basics/types">String</HelpLink>       | The log content as a string.                                                 |
+| **id**           | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the log.                                            |
+| **date**         | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the log was created.                                           |
+
+#### Types
+
+These are the available log types with an explanation of what they mean.
+
+| Type         | Description                                           |
+| ------------ | ----------------------------------------------------- |
+| **request**  | The log is an HTTP request.                           |
+| **response** | The log is an HTTP response.                          |
+| **command**  | The log is a terminal command, e.g. `npm start`.      |
+| **stdout**   | The log is anything the application wrote to console. |
+
+##### Example Request
+
+<Request
+  url={`${API_ENDPOINT}/v2/now/deployments/Cm6WigEH9EBI4Uzs2WA6qOGe/events?name=team_nLlpyC6REAzxudGFKbrMDlud-5916ac0d61abdb050d45f579aaa77c70a7&statusCode=5xx`}
+  auth
+/>

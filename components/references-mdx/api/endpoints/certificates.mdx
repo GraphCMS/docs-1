@@ -1,0 +1,231 @@
+import { Code } from '~/components/text/code'
+import { HelpLink } from '~/components/text/link'
+import Endpoint from '~/components/api/endpoint'
+import Request from '~/components/api/request'
+import { API_ENDPOINT } from '~/lib/constants'
+
+export const meta = {
+  editUrl: 'pages/docs/api/api-docs-mdx/endpoints/certificates.mdx',
+  lastEdited: '2019-10-17T14:44:04.000Z',
+}
+
+## Certificates
+
+### List certificates
+
+<Endpoint method="GET" url="/v4/now/certs" />
+
+Retrieves a list of certificates issued for the authenticating user or
+information about the certificate issued for the common name specified in the URL.
+By default it returns 20 certificates if no `limit` is provided.
+The rest can be retrieved using the pagination options described below.
+
+#### Request Query Parameters
+
+The response of this API can be controlled with the following optional query parameters.
+
+| Key       | Description                                                |
+| --------- | ---------------------------------------------------------- |
+| **limit** | Maximum number of certificates to list from a request.     |
+| **since** | Get certificates created after this JavaScript timestamp.  |
+| **until** | Get certificates created before this JavaScript timestamp. |
+
+#### Response Parameters
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                      |
+| -------------- | ---------------------------------------------------------- | -------------------------------- |
+| **certs**      | <HelpLink href="#api-basics/types">List</HelpLink>         | The list of issued certificates. |
+| **pagination** | <HelpLink href="#api-basics/types">Map</HelpLink>          | A map with pagination options.   |
+
+#### Certificate
+
+This is the format of each item in the `certs` list.
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink>    | Description                                                   |
+| -------------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
+| **uid**        | <HelpLink href="#api-basics/types">ID</HelpLink>              | The unique identifier of the certificate.                     |
+| **cns**        | <HelpLink href="#api-basics/types">List&lt;String></HelpLink> | The common names for which domain the certificate was issued. |
+| **created**    | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate was created.                    |
+| **expiration** | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate is going to expire.             |
+| **createdAt**  | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate was created.                    |
+| **expiresAt**  | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate is going to expire.             |
+| **autoRenew**  | <HelpLink href="#api-basics/types">Boolean</HelpLink>         | If the certificate is going to be automatically renewed.      |
+
+#### Pagination
+
+This is the format of the `pagination` map.
+
+| Key       | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                                         |
+| --------- | ---------------------------------------------------------- | ------------------------------------------------------------------- |
+| **count** | <HelpLink href="#api-basics/types">Number</HelpLink>       | The number of returned certificates.                                |
+| **next**  | <HelpLink href="#api-basics/types">Date</HelpLink>         | The JavaScript timestamp to fetch the next set of certificates.     |
+| **prev**  | <HelpLink href="#api-basics/types">Date</HelpLink>         | The JavaScript timestamp to fetch the previous set of certificates. |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v4/now/certs?limit=2`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "certs": [
+    {
+      "cns": ["testing.example.com", "*.example.com"],
+      "uid": "oAjf6y9pxZgCJyQfrclN",
+      "created": "2016-08-23T18:13:09.773Z",
+      "expiration": "2016-12-16T16:00:00.000Z",
+      "createdAt": 1471968789000,
+      "expiresAt": 1481900400000,
+      "autoRenew": true
+    },
+    {
+      "cns": ["testing2.example.com", "*.example.com"],
+      "uid": "tyrf6y9pxZgCJyQfttyu",
+      "created": "2016-08-22T18:13:09.773Z",
+      "expiration": "2016-12-15T16:00:00.000Z",
+      "createdAt": 1471882389000,
+      "expiresAt": 1481814000000,
+      "autoRenew": true
+    }
+  ],
+  "pagination": {
+    "count": 2,
+    "next": 1471882389000,
+    "prev": 1471968789000
+  }
+}`}</Code>
+
+### Get a single certificate
+
+<Endpoint method="GET" url="/v3/now/certs/:id" />
+
+Retrieves the information about the certificate issued for
+certificate id specified in the URL.
+
+#### Response Parameters
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink>    | Description                                                   |
+| -------------- | ------------------------------------------------------------- | ------------------------------------------------------------- |
+| **uid**        | <HelpLink href="#api-basics/types">ID</HelpLink>              | The unique identifier of the certificate.                     |
+| **cns**        | <HelpLink href="#api-basics/types">List&lt;String></HelpLink> | The common names for which domain the certificate was issued. |
+| **created**    | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate was created.                    |
+| **expiration** | <HelpLink href="#api-basics/types">Date</HelpLink>            | The date when the certificate is going to expire.             |
+| **autoRenew**  | <HelpLink href="#api-basics/types">Boolean</HelpLink>         | If the certificate is going to be automatically renewed.      |
+
+##### Example Request
+
+<Request url={`${API_ENDPOINT}/v3/now/certs/oAjf6y9pxZgCJyQfrclN`} auth />
+
+##### Example Response
+
+<Code lang="json">{`{
+  "cns": ["wow.example.com"],
+  "uid": "oAjf6y9pxZgCJyQfrclN",
+  "created": "2016-08-23T18:13:09.773Z",
+  "expiration": "2016-12-16T16:00:00.000Z",
+  "autoRenew": true
+}`}</Code>
+
+### Create a new certificate
+
+<Endpoint method="POST" url="/v3/now/certs" />
+
+Issues and stores a new certificate for the common names given in
+the body using **Let's Encrypt**.
+
+The body should contain \`domains\` array and it may contain \`renew\` field to renew an existing certificate.
+
+#### Request Parameters
+
+| Key         | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink>    | Required | Description                                                            |
+| ----------- | ------------------------------------------------------------- | -------- | ---------------------------------------------------------------------- |
+| **domains** | <HelpLink href="#api-basics/types">List&lt;String></HelpLink> | Yes      | A list of Common Names for which the certificate is being provisioned. |
+
+#### Response Parameters
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                      |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------------ |
+| **uid**        | <HelpLink href="#api-basics/types">ID</HelpLink>           | The unique identifier of the issued certificate. |
+| **created_at** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the certificate was created.       |
+
+##### Example Request
+
+<Request
+  method="POST"
+  url={`${API_ENDPOINT}/v3/now/certs`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    domains: ['testing.example.com'],
+    renew: true,
+  }}
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "uid": "zWsFytQUFlkUWaR7nWdwS7xR"
+  "created_at": 2016-06-01T21:03:10.420Z"
+}`}</Code>
+
+### Submit a certificate
+
+<Endpoint method="PUT" url="/v3/now/certs" />
+
+Create a new certificate entry with a user-supplied certificate.
+
+The body should contain `cert`, private `key`, and `ca` chain fields in PEM format.
+
+#### Request Parameters
+
+| Key      | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Required | Description                |
+| -------- | ---------------------------------------------------------- | -------- | -------------------------- |
+| **ca**   | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | PEM formatted CA chain.    |
+| **cert** | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | PEM formatted certificate. |
+| **key**  | <HelpLink href="#api-basics/types">String</HelpLink>       | Yes      | PEM formatted private key. |
+
+#### Response Parameters
+
+| Key            | <HelpLink href="#api-basics/types" hasIcon>Type</HelpLink> | Description                                |
+| -------------- | ---------------------------------------------------------- | ------------------------------------------ |
+| **created_at** | <HelpLink href="#api-basics/types">Date</HelpLink>         | The date when the certificate was created. |
+
+##### Example Request
+
+<Request
+  method="PUT"
+  url={`${API_ENDPOINT}/v3/now/certs`}
+  headers={{
+    'Content-Type': 'application/json',
+  }}
+  auth
+  body={{
+    ca: 'PEM formatted CA chain',
+    cert: 'PEM formatted certificate',
+    key: 'PEM formatted private key',
+  }}
+/>
+
+##### Example Response
+
+<Code lang="json">{`{
+  "created_at": 2016-06-01T21:03:10.420Z"
+}`}</Code>
+
+### Delete a certificate
+
+<Endpoint method="DELETE" url="/v3/now/certs/:id" />
+
+Delete an existing certificate entry. If the certificate entry was
+removed successfully the endpoint will return with code **200** and
+an empty body; Otherwise an error object is returned.
+
+##### Example Request
+
+<Request
+  method="DELETE"
+  url={`${API_ENDPOINT}/v3/now/certs/zWsFytQUFlkUWaR7nWdwS7xR`}
+  auth
+/>

@@ -3,7 +3,7 @@ import { H5 } from '~/components/text'
 import { DeployButton, Button } from '~/components/buttons'
 import Link from '~/components/text/link'
 
-export default function({ quickstart, icons, href, example, demo }) {
+export default function Quickstart({ quickstart, icons, href, example, demo }) {
   const isAmp = useAmp()
 
   const Icon = ({ source }) =>
@@ -24,7 +24,7 @@ export default function({ quickstart, icons, href, example, demo }) {
       <Link href={href}>
         <span className="quickstart-icons">
           {Array.isArray(icons) ? (
-            icons.map(icon =>
+            icons.map((icon) =>
               typeof icon === 'object' ? (
                 <span key={icon.src} style={{ backgroundColor: icon.color }}>
                   <Icon source={icon.src} />
